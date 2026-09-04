@@ -1056,8 +1056,15 @@
             <div class="stat-card">
                 <div class="stat-icon" style="background: #f0fdf4; color: #16a34a;">💰</div>
                 <div class="stat-info">
-                    <div class="stat-label">Tổng Giá Trị Kho</div>
+                    <div class="stat-label">Tổng Giá Trị Tồn Kho</div>
                     <div class="stat-value" id="statTotalValue">0 đ</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: #fdf2f8; color: #db2777;">💵</div>
+                <div class="stat-info">
+                    <div class="stat-label">Tiền Hàng Đã Bán</div>
+                    <div class="stat-value" id="statSoldValue">0 đ</div>
                 </div>
             </div>
         </div>
@@ -1080,8 +1087,8 @@
                     </select>
 
                     <select class="filter-select" id="stockFilter" onchange="filterData()">
-                        <option value="ALL">Tất cả trạng thái hàng</option>
-                        <option value="INSTOCK" selected>📦 Đang còn hàng trong kho</option>
+                        <option value="ALL" selected>Tất cả trạng thái hàng</option>
+                        <option value="INSTOCK">📦 Đang còn hàng trong kho</option>
                         <option value="HAS_CUSTOMER">👤 Đã có khách / Đang giữ</option>
                         <option value="REPAIR">🔧 Khu sửa chữa</option>
                         <option value="SOLD">⚫ Đã bán</option>
@@ -7391,6 +7398,34 @@
             }
         }
 
+        function isSoldItem(item) {
+            if (!item) return false;
+            if (item.Location === "Đã bán" || item.Quantity === 0) return true;
+            const pNote = (item.PriceNote || "").toLowerCase();
+            if (pNote.includes("đã bán") || pNote.includes("bán rồi")) return true;
+            const pStatus = (item.PriceStatus || "").toLowerCase();
+            if (pStatus.includes("đã bán") || pStatus.includes("da ban")) return true;
+            
+            const cust = customerDB[item.SKU];
+            if (cust) {
+                const s = (cust.status || "").toLowerCase();
+                const ch = (cust.channel || "").toLowerCase();
+                if (s.includes("đã bán") || s.includes("đã giao") || s.includes("da ban") || s.includes("da giao")) return true;
+                if (ch.includes("đã bán") || ch.includes("da ban")) return true;
+            }
+            return false;
+        }
+
+        function isRepairItem(item) {
+            if (!item) return false;
+            if (item.Location === "Khu sửa chữa") return true;
+            const pStatus = (item.PriceStatus || "").toLowerCase();
+            if (pStatus.includes("khu sửa chữa") || pStatus.includes("sửa chữa")) return true;
+            const cust = customerDB[item.SKU];
+            if (cust && (cust.status || "").toLowerCase().includes("sửa chữa")) return true;
+            return false;
+        }
+
         // ACCURATE PRICE STATUS
         function getPriceStatusInfo(status, price, location) {
             const s = (status || "").toLowerCase();
@@ -7422,19 +7457,27 @@
 
         function updateStats(items) {
             const total = rawInventory.length;
-            const inStock = rawInventory.filter(x => x.Location !== "Đã bán" && x.Quantity > 0).length;
-            const repair = rawInventory.filter(x => x.Location === "Khu sửa chữa").length;
-            const soldOrHasCust = rawInventory.filter(x => x.Location === "Đã bán" || x.Quantity === 0 || customerDB[x.SKU]).length;
+            const soldItems = rawInventory.filter(x => isSoldItem(x));
+            const inStockItems = rawInventory.filter(x => !isSoldItem(x));
+            const repairItems = rawInventory.filter(x => isRepairItem(x));
             
-            const totalValue = rawInventory
-                .filter(x => x.Location !== "Đã bán" && x.Quantity > 0 && x.UnitPrice > 0)
+            const totalInStockValue = inStockItems
+                .filter(x => x.UnitPrice > 0)
+                .reduce((acc, curr) => acc + (curr.UnitPrice || 0), 0);
+
+            const totalSoldValue = soldItems
+                .filter(x => x.UnitPrice > 0)
                 .reduce((acc, curr) => acc + (curr.UnitPrice || 0), 0);
 
             document.getElementById("statTotalItems").textContent = total + " SKU";
-            document.getElementById("statInStock").textContent = inStock + " món";
-            document.getElementById("statRepair").textContent = repair + " máy";
-            document.getElementById("statSold").textContent = soldOrHasCust + " món";
-            document.getElementById("statTotalValue").textContent = formatVND(totalValue);
+            document.getElementById("statInStock").textContent = inStockItems.length + " món";
+            document.getElementById("statRepair").textContent = repairItems.length + " máy";
+            document.getElementById("statSold").textContent = soldItems.length + " món";
+            document.getElementById("statTotalValue").textContent = formatVND(totalInStockValue);
+            const soldValElem = document.getElementById("statSoldValue");
+            if (soldValElem) {
+                soldValElem.textContent = formatVND(totalSoldValue);
+            }
         }
 
         function initCategoryPills() {
@@ -7513,10 +7556,11 @@
                 if (statusFilter === "UNPRICED" && !pStatus.includes("chưa định giá") && !pStatus.includes("chua dinh gia") && item.UnitPrice > 0) return false;
                 if (statusFilter === "REPAIR" && item.Location !== "Khu sửa chữa") return false;
 
-                const isSold = item.Location === "Đã bán" || item.Quantity === 0;
+                const isSold = isSoldItem(item);
+                const isRep = isRepairItem(item);
                 if (stockFilter === "INSTOCK" && isSold) return false;
                 if (stockFilter === "SOLD" && !isSold) return false;
-                if (stockFilter === "REPAIR" && item.Location !== "Khu sửa chữa") return false;
+                if (stockFilter === "REPAIR" && !isRep) return false;
                 if (stockFilter === "HAS_CUSTOMER" && !customerDB[item.SKU]) return false;
 
                 return true;
@@ -7573,11 +7617,12 @@
                 const catIcon = getCategoryIcon(catName);
                 const palette = getCategoryPalette(catName);
                 
-                const catTotalValue = catItems
-                    .filter(x => x.Location !== "Đã bán" && x.Quantity > 0 && x.UnitPrice > 0)
+                const catInStockItems = catItems.filter(x => !isSoldItem(x));
+                const catTotalValue = catInStockItems
+                    .filter(x => x.UnitPrice > 0)
                     .reduce((sum, x) => sum + (x.UnitPrice || 0), 0);
                 
-                const catInStockCount = catItems.filter(x => x.Location !== "Đã bán" && x.Quantity > 0).length;
+                const catInStockCount = catInStockItems.length;
 
                 // Table Group Header Row
                 tableHtml += `
