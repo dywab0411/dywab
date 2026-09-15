@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Quản Lý Công Việc - CVMN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --pending-bg: #fef3c7;
+      --pending-text: #b45309;
+      --pending-border: #fde68a;
+      --done: #10b981;
+      --done-bg: #dcfce7;
+      --done-text: #15803d;
+      --done-border: #86efac;
+      /* Assignee Colors */
+      --tea-color: #8b5cf6;
+      --tea-bg: #f5f3ff;
+      --tea-border: #ddd6fe;
+      --khang-color: #0284c7;
+      --khang-bg: #f0f9ff;
+      --khang-border: #bae6fd;
+      --nhanvan-color: #059669;
+      --nhanvan-bg: #ecfdf5;
+      --nhanvan-border: #a7f3d0;
+      --tai-color: #d97706;
+      --tai-bg: #fffbeb;
+      --tai-border: #fde68a;
+      --nhan-color: #e11d48;
+      --nhan-bg: #fff1f2;
+      --nhan-border: #fecdd3;
+
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 2.5rem 1rem;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #fff;
+      padding: 1.75rem 2rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-title-wrap h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header-title-wrap p {
+      color: #94a3b8;
+      font-size: 0.85rem;
+      margin-top: 0.25rem;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.55rem 0.95rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.82rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      user-select: none;
+    }
+
+    .btn-tea { background-color: var(--tea-color); color: white; }
+    .btn-tea:hover { background-color: #7c3aed; }
+
+    .btn-khang { background-color: var(--khang-color); color: white; }
+    .btn-khang:hover { background-color: #0369a1; }
+
+    .btn-nhanvan { background-color: var(--nhanvan-color); color: white; }
+    .btn-nhanvan:hover { background-color: #047857; }
+
+    .btn-tai { background-color: var(--tai-color); color: white; }
+    .btn-tai:hover { background-color: #b45309; }
+
+    .btn-nhan { background-color: var(--nhan-color); color: white; }
+    .btn-nhan:hover { background-color: #be123c; }
+    .person-card.nhan { border-left: 5px solid var(--nhan-color); }
+    .avatar.nhan { background: linear-gradient(135deg, #fb7185, #e11d48); }
+    .badge-user.nhan {
+      background-color: var(--nhan-bg);
+      color: var(--nhan-color);
+      border: 1px solid var(--nhan-border);
+    }
+
+    .btn-outline {
+      background-color: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #f1f5f9;
+    }
+    .btn-outline:hover { background-color: rgba(255, 255, 255, 0.15); }
+    
+    .btn-nav {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      text-decoration: none;
+    }
+    .btn-nav:hover {
+      background-color: #e2e8f0;
+    }
+
+    /* Assignee Overview Grid */
+    .assignee-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .assignee-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .assignee-grid { grid-template-columns: 1fr; }
+    }
+
+    .person-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.15rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .person-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .person-card.tea { border-left: 5px solid var(--tea-color); }
+    .person-card.khang { border-left: 5px solid var(--khang-color); }
+    .person-card.nhanvan { border-left: 5px solid var(--nhanvan-color); }
+    .person-card.tai { border-left: 5px solid var(--tai-color); }
+
+    .person-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+
+    .avatar.tea { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+    .avatar.khang { background: linear-gradient(135deg, #38bdf8, #0284c7); }
+    .avatar.nhanvan { background: linear-gradient(135deg, #34d399, #059669); }
+    .avatar.tai { background: linear-gradient(135deg, #fbbf24, #d97706); }
+
+    .person-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .person-task-count {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Stats & Progress */
+    .stats-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 640px) {
+      .stats-row { grid-template-columns: 1fr; }
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.1rem 1.25rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-number {
+      font-size: 1.7rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 9px;
+      background-color: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 0.4rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2563eb, #10b981);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 999px;
+    }
+
+    /* Filter Toolbar */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #e2e8f0;
+      padding: 4px;
+      border-radius: var(--radius-md);
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      padding: 0.4rem 0.8rem;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.2s ease;
+    }
+
+    .filter-tab.active {
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Table Container */
+    .table-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .task-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .task-table th {
+      background-color: #f8fafc;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.6px;
+      padding: 0.95rem 1.15rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .task-table td {
+      padding: 1.05rem 1.15rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.92rem;
+      vertical-align: middle;
+      transition: background-color 0.15s ease;
+    }
+
+    .task-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .task-table tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    .task-row.completed td {
+      background-color: #fcfdfd;
+    }
+
+    .task-row.completed .task-title {
+      text-decoration: line-through;
+      color: #94a3b8;
+    }
+
+    .task-row.completed .detail-text,
+    .task-row.completed .detail-card {
+      opacity: 0.55;
+    }
+
+    .checkbox-custom {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--done);
+      border-radius: 5px;
+    }
+
+    .task-title {
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Assignee Badges in Table */
+    .badge-user {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-user.tea {
+      background-color: var(--tea-bg);
+      color: var(--tea-color);
+      border: 1px solid var(--tea-border);
+    }
+
+    .badge-user.khang {
+      background-color: var(--khang-bg);
+      color: var(--khang-color);
+      border: 1px solid var(--khang-border);
+    }
+
+    .badge-user.nhanvan {
+      background-color: var(--nhanvan-bg);
+      color: var(--nhanvan-color);
+      border: 1px solid var(--nhanvan-border);
+    }
+
+    .badge-user.tai {
+      background-color: var(--tai-bg);
+      color: var(--tai-color);
+      border: 1px solid var(--tai-border);
+    }
+
+    .detail-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 3px solid #2563eb;
+      padding: 0.6rem 0.85rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.84rem;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    .detail-text {
+      color: #334155;
+      font-size: 0.88rem;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+      background-color: var(--pending-bg);
+      color: var(--pending-text);
+      border: 1px solid var(--pending-border);
+    }
+
+    .badge-status.done {
+      background-color: var(--done-bg);
+      color: var(--done-text);
+      border-color: var(--done-border);
+    }
+
+    /* Section dividers in table */
+    .section-header td {
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #475569;
+      padding: 0.7rem 1.15rem;
+      border-bottom: 2px solid #cbd5e1;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      header { background: #0f172a; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .header-actions, .toolbar, .toast, .assignee-grid { display: none !important; }
+      .table-card { box-shadow: none; border: 1px solid #cbd5e1; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <header>
+    <div class="header-title-wrap">
+      <h1>📋 BẢNG THEO DÕI CÔNG VIỆC</h1>
+      <p>Thư mục: <code>D:\antigravity\CVMN</code> • Cập nhật: 13/09/2026</p>
+    </div>
+    <div class="header-actions">
+      <a href="index.html" class="btn btn-nav">📦 Trở về Quản Lý Kho</a>
+      <button class="btn btn-tea" onclick="copyAssigneeText('tea')">📋 Copy việc Tea</button>
+      <button class="btn btn-khang" onclick="copyAssigneeText('khang')">📋 Copy việc Khang</button>
+      <button class="btn btn-nhan" onclick="copyAssigneeText('nhan')">📋 Copy việc Mr. Nhân</button>
+      <button class="btn btn-nhanvan" onclick="copyAssigneeText('nhanvan')">📋 Copy việc Nhân Văn</button>
+      <button class="btn btn-tai" onclick="copyAssigneeText('tai')">📋 Copy việc Tài</button>
+      <button class="btn btn-outline" onclick="window.print()">🖨️ In / PDF</button>
+      <button class="btn btn-outline" onclick="resetTasks()">🔄 Đặt lại</button>
+    </div>
+  </header>
+
+  <!-- Assignee Grid (4 Members) -->
+  <div class="assignee-grid">
+    <!-- Card Tea -->
+    <div class="person-card tea" onclick="filterByPerson('tea')">
+      <div class="person-left">
+        <div class="avatar tea">T</div>
+        <div>
+          <div class="person-name">👤 Tea</div>
+          <div class="person-task-count" id="teaTaskSummary">2 công việc</div>
+        </div>
+      </div>
+      <span class="badge-user tea" id="teaBadge">2 việc</span>
+    </div>
+
+        <!-- Card Mr Nhân -->
+    <div class="person-card nhan" onclick="filterByPerson('nhan')">
+      <div class="person-left">
+        <div class="avatar nhan">N</div>
+        <div>
+          <div class="person-name">👤 Mr. Nhân</div>
+          <div class="person-task-count" id="nhanTaskSummary">13 công việc</div>
+        </div>
+      </div>
+      <span class="badge-user nhan" id="nhanBadge">13 việc</span>
+    </div>
+    <!-- Card Mr Khang -->
+    <div class="person-card khang" onclick="filterByPerson('khang')">
+      <div class="person-left">
+        <div class="avatar khang">K</div>
+        <div>
+          <div class="person-name">👤 Mr. Khang</div>
+          <div class="person-task-count" id="khangTaskSummary">7 công việc</div>
+        </div>
+      </div>
+      <span class="badge-user khang" id="khangBadge">7 việc</span>
+    </div>
+
+    <!-- Card Nhân Văn -->
+    <div class="person-card nhanvan" onclick="filterByPerson('nhanvan')">
+      <div class="person-left">
+        <div class="avatar nhanvan">NV</div>
+        <div>
+          <div class="person-name">👤 Nhân Văn</div>
+          <div class="person-task-count" id="nhanvanTaskSummary">9 công việc</div>
+        </div>
+      </div>
+      <span class="badge-user nhanvan" id="nhanvanBadge">9 việc</span>
+    </div>
+
+    <!-- Card Tài -->
+    <div class="person-card tai" onclick="filterByPerson('tai')">
+      <div class="person-left">
+        <div class="avatar tai">Tài</div>
+        <div>
+          <div class="person-name">👤 Tài</div>
+          <div class="person-task-count" id="taiTaskSummary">24 công việc</div>
+        </div>
+      </div>
+      <span class="badge-user tai" id="taiBadge">24 việc</span>
+    </div>
+  </div>
+
+  <!-- Stats & Progress -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="stat-label">Tiến độ tổng</span>
+        <span style="font-weight: 800; color: var(--primary); font-size: 0.95rem;" id="progressPercent">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+    </div>
+    <div class="stat-card" style="border-left: 4px solid var(--pending-text);">
+      <span class="stat-label">Chưa xong</span>
+      <span class="stat-number" style="color: #d97706;" id="pendingCount">42</span>
+    </div>
+    <div class="stat-card" style="border-left: 4px solid var(--done);">
+      <span class="stat-label">Hoàn thành</span>
+      <span class="stat-number" style="color: #059669;" id="completedCount">0</span>
+    </div>
+  </div>
+
+  <!-- Filter Toolbar -->
+  <div class="toolbar">
+    <!-- Filter by Person -->
+    <div class="filter-group">
+      <button class="filter-tab active" id="tabPersonAll" onclick="setPersonFilter('all', this)">Tất cả (<span id="personAllCount">42</span>)</button>
+      <button class="filter-tab" id="tabPersonTea" onclick="setPersonFilter('tea', this)">👤 Tea (<span id="personTeaCount">2</span>)</button>
+      <button class="filter-tab" id="tabPersonNhan" onclick="setPersonFilter('nhan', this)">👤 Mr. Nhân (<span id="personNhanCount">13</span>)</button>
+      <button class="filter-tab" id="tabPersonKhang" onclick="setPersonFilter('khang', this)">👤 Mr. Khang (<span id="personKhangCount">7</span>)</button>
+      <button class="filter-tab" id="tabPersonNhanvan" onclick="setPersonFilter('nhanvan', this)">👤 Nhân Văn (<span id="personNhanvanCount">9</span>)</button>
+      <button class="filter-tab" id="tabPersonTai" onclick="setPersonFilter('tai', this)">👤 Tài (<span id="personTaiCount">24</span>)</button>
+    </div>
+
+    <!-- Filter by Status -->
+    <div class="filter-group">
+      <button class="filter-tab active" onclick="setStatusFilter('all', this)">Tất cả (<span id="tabAllCount">42</span>)</button>
+      <button class="filter-tab" onclick="setStatusFilter('pending', this)">⏳ Chưa xong (<span id="tabPendingCount">42</span>)</button>
+      <button class="filter-tab" onclick="setStatusFilter('completed', this)">✅ Hoàn thành (<span id="tabDoneCount">0</span>)</button>
+    </div>
+  </div>
+
+  <!-- Table Card with Assignee, Task & Details -->
+  <div class="table-card">
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th style="width: 48px; text-align: center;">✓</th>
+          <th style="width: 50px; text-align: center;">STT</th>
+          <th style="width: 140px;">Người phụ trách</th>
+          <th style="width: 320px;">Công việc</th>
+          <th>Chi tiết</th>
+          <th style="width: 140px; text-align: center;">Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ===== TEA'S TASKS ===== -->
+        <!-- Task T1 -->
+        <tr class="task-row" id="row-t1" data-id="t1" data-assignee="tea">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('t1', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">1</td>
+          <td>
+            <span class="badge-user tea">👤 Tea</span>
+          </td>
+          <td>
+            <strong class="task-title">Gửi loa Aura đi sửa</strong>
+          </td>
+          <td>
+            <span class="detail-text">Loa Harman Kardon Aura</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-t1">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task T2 -->
+        <tr class="task-row" id="row-t2" data-id="t2" data-assignee="tea">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('t2', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">2</td>
+          <td>
+            <span class="badge-user tea">👤 Tea</span>
+          </td>
+          <td>
+            <strong class="task-title">Lấy loa Klipsch (kslip) về</strong>
+          </td>
+          <td>
+            <span class="detail-text">Loa Klipsch còn bên chỗ sửa chưa sửa xong</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-t2">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- ===== MR. KHANG'S TASKS ===== -->
+        <!-- Task K1 -->
+        <tr class="task-row" id="row-k1" data-id="k1" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k1', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">3</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Đặt cap lens Nikon cho khách</strong>
+          </td>
+          <td>
+            <div class="detail-card">
+              🛒 <strong>Kênh đặt:</strong> Shopee<br>
+              👤 <strong>Tên khách:</strong> Kim Jay (người Philippines)<br>
+              📞 <strong>SĐT:</strong> <a href="tel:0923499590" style="color: #2563eb; text-decoration: none; font-weight: 700;">0923499590</a><br>
+              📍 <strong>Địa chỉ nhận:</strong> 39 Số 16, Phú Thọ, Hồ Chí Minh, Việt Nam
+            </div>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k1">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K4 -->
+        <tr class="task-row" id="row-k4" data-id="k4" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k4', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">4</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Sửa máy ảnh Sony NEX 5</strong>
+          </td>
+          <td>
+            <span class="detail-text">Bản Nhật - Bị loạn cảm</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k4">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K5 -->
+        <tr class="task-row" id="row-k5" data-id="k5" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k5', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">5</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Sửa máy ảnh Canon 650D</strong>
+          </td>
+          <td>
+            <span class="detail-text">Hư nút nguồn</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k5">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K6 -->
+        <tr class="task-row" id="row-k6" data-id="k6" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k6', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">6</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Xử lý sạc thỏi son dự phòng Anker</strong>
+          </td>
+          <td>
+            <span class="detail-text">Sạc dự phòng Anker dạng thỏi son</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k6">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K8 -->
+        <tr class="task-row" id="row-k8" data-id="k8" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k8', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">7</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Xử lý máy ảnh Fuji X-A2 màu hồng</strong>
+          </td>
+          <td>
+            <span class="detail-text">Bị bệt sensor</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k8">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K9 -->
+        <tr class="task-row" id="row-k9" data-id="k9" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k9', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">8</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Sửa lens Viltrox 23mm f/1.4</strong>
+          </td>
+          <td>
+            <span class="detail-text">Lens Viltrox 23 F1.4</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k9">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        
+        <!-- Task K11 -->
+        <tr class="task-row" id="row-k11" data-id="k11" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k11', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">9</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Thay pin Laptop HP</strong>
+          </td>
+          <td>
+            <span class="detail-text">Laptop • LT016 (SN: 558NP)</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k11">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K12 -->
+        <tr class="task-row" id="row-k12" data-id="k12" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k12', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">10</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Đặt đệm tai cho 2 tai nghe Sony XM4</strong>
+          </td>
+          <td>
+            <span class="detail-text">Đặt đệm tai 2 tai nghe Sony WH-1000XM4</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k12">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K13 -->
+        <tr class="task-row" id="row-k13" data-id="k13" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k13', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">11</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Đặt cap trên cho Lens Sony Zeiss Sonnar T* E 24mm F1.8 ZA</strong>
+          </td>
+          <td>
+            <span class="detail-text">Cap trên cho Lens Sony Zeiss Sonnar T* E 24mm F1.8 ZA</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k13">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K14 -->
+        <tr class="task-row" id="row-k14" data-id="k14" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k14', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">12</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Đặt cap trên cho Lens Sony E 50mm F1.8 OSS</strong>
+          </td>
+          <td>
+            <span class="detail-text">Cap trên cho Lens Sony E 50mm F1.8 OSS</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k14">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K15 -->
+        <tr class="task-row" id="row-k15" data-id="k15" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k15', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">13</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Đặt cap dưới cho Lens kit Fujifilm XC 16-50mm Mark II</strong>
+          </td>
+          <td>
+            <span class="detail-text">Thiếu cap dưới Lens kit Fujifilm XC 16-50mm Mark II</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k15">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K16 -->
+        <tr class="task-row" id="row-k16" data-id="k16" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k16', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">14</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Đặt cap hãng Lens TTArtisan AF 35mm f/1.8 ED for Fujifilm ngàm X</strong>
+          </td>
+          <td>
+            <span class="detail-text">Thiếu cap hãng Lens TTArtisan AF 35mm f/1.8 ED for Fujifilm ngàm X</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k16">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task K10 -->
+        <tr class="task-row" id="row-k10" data-id="k10" data-assignee="khang">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('k10', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">15</td>
+          <td>
+            <span class="badge-user khang">👤 Mr. Khang</span>
+          </td>
+          <td>
+            <strong class="task-title">Sửa lens Kit Fuji</strong>
+          </td>
+          <td>
+            <span class="detail-text">Lens Kit Fujifilm</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-k10">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        
+        <!-- ===== MR. NHÂN'S TASKS (Hướng xử lý máy xác) ===== -->
+        <!-- Task NHAN1 -->
+        <tr class="task-row" id="row-nhan1" data-id="nhan1" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan1', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">16</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Xác iPhone 11 64GB Trắng</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>IPHONE-03 (SN: 60968)</strong> • Tình trạng: Vỏ xấu, màn lô, pin lô, hoạt động tốt, full chức năng</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan1">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN2 -->
+        <tr class="task-row" id="row-nhan2" data-id="nhan2" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan2', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">17</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Xác iPhone 11 Pro Max 64GB Gold</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>IPHONE-04 (SN: 23401)</strong> • Tình trạng: Hư màn, vỏ lô, cam rung, hư NFC</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan2">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN3 -->
+        <tr class="task-row" id="row-nhan3" data-id="nhan3" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan3', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">18</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Xác Samsung Galaxy Note 20 Ultra Trắng</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>ANDROID-01 (SN: 32961)</strong> • Tình trạng: Màn 3 sọc, bung lưng, ngoại hình khá</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan3">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN4 -->
+        <tr class="task-row" id="row-nhan4" data-id="nhan4" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan4', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">19</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Samsung Galaxy S20 FE 8/256GB Blue</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>ANDROID-02 (SN: 70854)</strong> • Tình trạng: Ngoại hình xấu, màn trầy mèo</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan4">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN5 -->
+        <tr class="task-row" id="row-nhan5" data-id="nhan5" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan5', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">20</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Xác Samsung Galaxy S21 FE Tím</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>ANDROID-03 (SN: 41335)</strong> • Tình trạng: Màn full sọc</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan5">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN6 -->
+        <tr class="task-row" id="row-nhan6" data-id="nhan6" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan6', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">21</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Samsung Galaxy S22 Ultra 8/128GB Hồng</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>ANDROID-04 (SN: 77326)</strong> • Tình trạng: Màn sọc, bể lưng</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan6">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN7 -->
+        <tr class="task-row" id="row-nhan7" data-id="nhan7" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan7', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">22</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Google Pixel 6 Pro</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>ANDROID-10</strong> • Tình trạng: Màn sọc</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan7">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN8 -->
+        <tr class="task-row" id="row-nhan8" data-id="nhan8" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan8', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">23</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Xiaomi Redmi Note 9 Pro</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>ANDROID-11</strong> • Tình trạng: Màn sọc</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan8">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN9 -->
+        <tr class="task-row" id="row-nhan9" data-id="nhan9" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan9', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">24</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: MacBook Pro 2019 13-inch</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>LT017 (SN: WL40L) • i5 / 8GB / 128GB</strong> • Tình trạng: Hư màn, ngoại hình cấn; kèm sạc (chưa bàn giao sạc); khu sửa chữa</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan9">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN10 -->
+        <tr class="task-row" id="row-nhan10" data-id="nhan10" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan10', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">25</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Laptop HP</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>LT016 (SN: 558NP) • i5 Gen 10 / 8GB / 512GB</strong> • Tình trạng: Ngoại hình cũ, nguyên zin, màn có 2 chấm trắng, pin chai (đợi thay pin), kèm sạc</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan10">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN11 -->
+        <tr class="task-row" id="row-nhan11" data-id="nhan11" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan11', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">26</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Xác Laptop Acer - Lỗi màn</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>LT018 (C7200) • i5 Gen 8 / 8GB / 256GB</strong> • Tình trạng: Màn lỗi, vỏ không hư, ngoại hình cũ, chai pin, không sạc, nâng RAM được; khu sửa chữa</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan11">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN12 -->
+        <tr class="task-row" id="row-nhan12" data-id="nhan12" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan12', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">27</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Xác Laptop Acer - Lỗi vỏ #1</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>LT019 (97200) • i5 Gen 8 / 8GB / 256GB</strong> • Tình trạng: Lỗi vỏ, ngoại hình cũ, chai pin, không sạc, nâng RAM được; khu sửa chữa</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan12">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NHAN13 -->
+        <tr class="task-row" id="row-nhan13" data-id="nhan13" data-assignee="nhan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nhan13', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">28</td>
+          <td>
+            <span class="badge-user nhan">👤 Mr. Nhân</span>
+          </td>
+          <td>
+            <strong class="task-title">Cho hướng xử lý: Xác Laptop Acer - Lỗi vỏ #2</strong>
+          </td>
+          <td>
+            <span class="detail-text"><strong>LT020 (57200) • i5 Gen 8 / 8GB / 256GB</strong> • Tình trạng: Lỗi vỏ, ngoại hình cũ, chai pin, không sạc, nâng RAM được; khu sửa chữa</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nhan13">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- ===== NHÂN VĂN'S TASKS (Đặt hàng vật tư) ===== -->
+        <!-- Task NV1 -->
+        <tr class="task-row" id="row-nv1" data-id="nv1" data-assignee="nhanvan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nv1', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">29</td>
+          <td>
+            <span class="badge-user nhanvan">👤 Nhân Văn</span>
+          </td>
+          <td>
+            <strong class="task-title">Hết khăn giấy khô</strong>
+          </td>
+          <td>
+            <span class="detail-text">Đặt hàng bổ sung khăn giấy khô</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nv1">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NV2 -->
+        <tr class="task-row" id="row-nv2" data-id="nv2" data-assignee="nhanvan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nv2', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">30</td>
+          <td>
+            <span class="badge-user nhanvan">👤 Nhân Văn</span>
+          </td>
+          <td>
+            <strong class="task-title">Hết cột khí nhỏ</strong>
+          </td>
+          <td>
+            <span class="detail-text">Đặt hàng bổ sung cột khí nhỏ</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nv2">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NV3 -->
+        <tr class="task-row" id="row-nv3" data-id="nv3" data-assignee="nhanvan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nv3', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">31</td>
+          <td>
+            <span class="badge-user nhanvan">👤 Nhân Văn</span>
+          </td>
+          <td>
+            <strong class="task-title">Gần hết xốp bi</strong>
+          </td>
+          <td>
+            <span class="detail-text">Đặt hàng bổ sung xốp bi</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nv3">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NV4 -->
+        <tr class="task-row" id="row-nv4" data-id="nv4" data-assignee="nhanvan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nv4', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">32</td>
+          <td>
+            <span class="badge-user nhanvan">👤 Nhân Văn</span>
+          </td>
+          <td>
+            <strong class="task-title">Gần hết băng keo đỏ</strong>
+          </td>
+          <td>
+            <span class="detail-text">Đặt hàng bổ sung băng keo đỏ</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nv4">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NV5 -->
+        <tr class="task-row" id="row-nv5" data-id="nv5" data-assignee="nhanvan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nv5', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">33</td>
+          <td>
+            <span class="badge-user nhanvan">👤 Nhân Văn</span>
+          </td>
+          <td>
+            <strong class="task-title">Gần hết hộp giấy</strong>
+          </td>
+          <td>
+            <span class="detail-text">Đặt hàng bổ sung hộp giấy</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nv5">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NV6 -->
+        <tr class="task-row" id="row-nv6" data-id="nv6" data-assignee="nhanvan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nv6', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">34</td>
+          <td>
+            <span class="badge-user nhanvan">👤 Nhân Văn</span>
+          </td>
+          <td>
+            <strong class="task-title">Gần hết băng keo trong</strong>
+          </td>
+          <td>
+            <span class="detail-text">Đặt hàng bổ sung băng keo trong</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nv6">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NV7 -->
+        <tr class="task-row" id="row-nv7" data-id="nv7" data-assignee="nhanvan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nv7', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">35</td>
+          <td>
+            <span class="badge-user nhanvan">👤 Nhân Văn</span>
+          </td>
+          <td>
+            <strong class="task-title">Gần hết tem bảo hành tròn</strong>
+          </td>
+          <td>
+            <span class="detail-text">Đặt hàng bổ sung tem bảo hành tròn</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nv7">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NV8 -->
+        <tr class="task-row" id="row-nv8" data-id="nv8" data-assignee="nhanvan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nv8', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">36</td>
+          <td>
+            <span class="badge-user nhanvan">👤 Nhân Văn</span>
+          </td>
+          <td>
+            <strong class="task-title">Hết củ sạc 5V-1A</strong>
+          </td>
+          <td>
+            <span class="detail-text">Đặt hàng bổ sung củ sạc 5V-1A</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nv8">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task NV9 -->
+        <tr class="task-row" id="row-nv9" data-id="nv9" data-assignee="nhanvan">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('nv9', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">37</td>
+          <td>
+            <span class="badge-user nhanvan">👤 Nhân Văn</span>
+          </td>
+          <td>
+            <strong class="task-title">Gần hết giấy in đơn A6</strong>
+          </td>
+          <td>
+            <span class="detail-text">Đặt hàng bổ sung giấy in đơn A6</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-nv9">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- ===== TÀI'S TASKS ===== -->
+        <!-- Task TAI1 -->
+        <tr class="task-row" id="row-tai1" data-id="tai1" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai1', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">38</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Mua 2 chai Vim vệ sinh toilet</strong>
+          </td>
+          <td>
+            <span class="detail-text">2 chai Vim vệ sinh toilet</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai1">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI2 -->
+        <tr class="task-row" id="row-tai2" data-id="tai2" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai2', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">39</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Mua băng keo giấy</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mua băng keo giấy</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai2">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI3 -->
+        <tr class="task-row" id="row-tai3" data-id="tai3" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai3', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">40</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số và tìm thông tin, SN các điện thoại A11</strong>
+          </td>
+          <td>
+            <span class="detail-text">Note mã số và tìm thông tin, SN các điện thoại Samsung Galaxy A11</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai3">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI4 -->
+        <tr class="task-row" id="row-tai4" data-id="tai4" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai4', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">41</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của iPhone XR 64GB MDM</strong>
+          </td>
+          <td>
+            <span class="detail-text">Note mã số, SN các điện thoại iPhone XR 64GB MDM</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai4">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI5 -->
+        <tr class="task-row" id="row-tai5" data-id="tai5" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai5', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">42</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của iPhone 11 Pro Max: pin thay new, còn giữ pin zin</strong>
+          </td>
+          <td>
+            <span class="detail-text">Pin thay new, còn giữ pin zin, a Nhân thu</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai5">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI6 -->
+        <tr class="task-row" id="row-tai6" data-id="tai6" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai6', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">43</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Sony WH-1000XM4</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: 72209</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai6">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI7 -->
+        <tr class="task-row" id="row-tai7" data-id="tai7" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai7', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">44</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Bàn phím Dark Alien R83</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: TBH</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai7">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI8 -->
+        <tr class="task-row" id="row-tai8" data-id="tai8" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai8', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">45</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Máy ảnh Samsung WB1000F đỏ</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: 04YSV</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai8">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI9 -->
+        <tr class="task-row" id="row-tai9" data-id="tai9" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai9', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">46</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Canon R50</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: 04764</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai9">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI10 -->
+        <tr class="task-row" id="row-tai10" data-id="tai10" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai10', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">47</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Lens Kit Canon 15-45mm</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: 56986</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai10">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI11 -->
+        <tr class="task-row" id="row-tai11" data-id="tai11" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai11', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">48</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Bàn phím ROG Falchion 65</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: 04903</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai11">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI12 -->
+        <tr class="task-row" id="row-tai12" data-id="tai12" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai12', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">49</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của PC đen (máy 1)</strong>
+          </td>
+          <td>
+            <span class="detail-text">PC đen</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai12">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI13 -->
+        <tr class="task-row" id="row-tai13" data-id="tai13" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai13', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">50</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của PC đen (máy 2)</strong>
+          </td>
+          <td>
+            <span class="detail-text">PC đen</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai13">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI14 -->
+        <tr class="task-row" id="row-tai14" data-id="tai14" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai14', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">51</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Đồng hồ Oppo Watch</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: TBH</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai14">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI15 -->
+        <tr class="task-row" id="row-tai15" data-id="tai15" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai15', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">52</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Insta360 Ace Pro</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: E9XNK</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai15">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI16 -->
+        <tr class="task-row" id="row-tai16" data-id="tai16" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai16', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">53</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Laptop HP (i5 Gen 10 / 8GB / 512GB)</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: 558NP</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai16">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI17 -->
+        <tr class="task-row" id="row-tai17" data-id="tai17" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai17', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">54</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của MacBook Pro 2019 13-inch (i5 / 8GB / 128GB)</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: WL40L</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai17">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI18 -->
+        <tr class="task-row" id="row-tai18" data-id="tai18" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai18', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">55</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của PS5 Slim bản Standard</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: 78544</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai18">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI19 -->
+        <tr class="task-row" id="row-tai19" data-id="tai19" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai19', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">56</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Tay cầm PS5</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: 47539</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai19">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI20 -->
+        <tr class="task-row" id="row-tai20" data-id="tai20" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai20', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">57</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của 2 Chuột Hàn Quốc</strong>
+          </td>
+          <td>
+            <span class="detail-text">2 chuột Hàn Quốc</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai20">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI21a -->
+        <tr class="task-row" id="row-tai21a" data-id="tai21a" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai21a', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">58</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Xác Laptop Acer - lỗi Màn (i5 Gen 8 / 8GB / 256GB)</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: C7200</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai21a">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI21b -->
+        <tr class="task-row" id="row-tai21b" data-id="tai21b" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai21b', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">59</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Xác Laptop Acer - lỗi Vỏ (i5 Gen 8 / 8GB / 256GB)</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: 97200</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai21b">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI21c -->
+        <tr class="task-row" id="row-tai21c" data-id="tai21c" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai21c', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">60</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Xác Laptop Acer - lỗi Vỏ (i5 Gen 8 / 8GB / 256GB)</strong>
+          </td>
+          <td>
+            <span class="detail-text">Mã: 57200</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai21c">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI22a -->
+        <tr class="task-row" id="row-tai22a" data-id="tai22a" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai22a', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">61</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của iPad mini 7 - máy 1 (128GB)</strong>
+          </td>
+          <td>
+            <span class="detail-text">iPad mini 7 (128GB)</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai22a">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI22b -->
+        <tr class="task-row" id="row-tai22b" data-id="tai22b" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai22b', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">62</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của iPad mini 7 - máy 2 (128GB)</strong>
+          </td>
+          <td>
+            <span class="detail-text">iPad mini 7 (128GB)</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai22b">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI23a -->
+        <tr class="task-row" id="row-tai23a" data-id="tai23a" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai23a', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">63</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Laptop Samsung - máy 1 (i5 Gen 8 / 8GB / 256GB)</strong>
+          </td>
+          <td>
+            <span class="detail-text">Laptop Samsung (i5 Gen 8 / 8GB / 256GB)</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai23a">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI23b -->
+        <tr class="task-row" id="row-tai23b" data-id="tai23b" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai23b', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">64</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Laptop Samsung - máy 2 (i5 Gen 8 / 8GB / 256GB)</strong>
+          </td>
+          <td>
+            <span class="detail-text">Laptop Samsung (i5 Gen 8 / 8GB / 256GB)</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai23b">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI24a -->
+        <tr class="task-row" id="row-tai24a" data-id="tai24a" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai24a', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">65</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Giá đỡ iPad - cái 1</strong>
+          </td>
+          <td>
+            <span class="detail-text">Giá đỡ iPad</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai24a">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+        <!-- Task TAI24b -->
+        <tr class="task-row" id="row-tai24b" data-id="tai24b" data-assignee="tai">
+          <td style="text-align: center;">
+            <input type="checkbox" class="checkbox-custom" onchange="toggleTask('tai24b', this.checked)">
+          </td>
+          <td style="text-align: center; font-weight: 700; color: #64748b;">66</td>
+          <td>
+            <span class="badge-user tai">👤 Tài</span>
+          </td>
+          <td>
+            <strong class="task-title">Note mã số, tìm SN của Giá đỡ iPad - cái 2</strong>
+          </td>
+          <td>
+            <span class="detail-text">Giá đỡ iPad</span>
+          </td>
+          <td style="text-align: center;">
+            <span class="badge-status" id="status-tai24b">⏳ Chưa xong</span>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="toast" id="toast">✅ Đã sao chép!</div>
+
+<script>
+  let currentPerson = 'all';
+  let currentStatus = 'all';
+
+  function loadState() {
+    const saved = localStorage.getItem('cvmn_tasks_multi_v7');
+    if (saved) {
+      const state = JSON.parse(saved);
+      Object.keys(state).forEach(id => {
+        const row = document.getElementById(`row-${id}`);
+        if (row) {
+          const cb = row.querySelector('.checkbox-custom');
+          if (cb) {
+            cb.checked = state[id];
+            applyStyle(id, state[id]);
+          }
+        }
+      });
+    }
+    updateMetrics();
+  }
+
+  function toggleTask(id, isDone) {
+    applyStyle(id, isDone);
+    saveState();
+    updateMetrics();
+    applyFilter();
+  }
+
+  function applyStyle(id, isDone) {
+    const row = document.getElementById(`row-${id}`);
+    const badge = document.getElementById(`status-${id}`);
+    if (row && badge) {
+      if (isDone) {
+        row.classList.add('completed');
+        badge.classList.add('done');
+        badge.innerHTML = '✅ Hoàn thành';
+      } else {
+        row.classList.remove('completed');
+        badge.classList.remove('done');
+        badge.innerHTML = '⏳ Chưa xong';
+      }
+    }
+  }
+
+  function saveState() {
+    const state = {};
+    document.querySelectorAll('.task-row').forEach(row => {
+      const id = row.getAttribute('data-id');
+      const cb = row.querySelector('.checkbox-custom');
+      state[id] = cb ? cb.checked : false;
+    });
+    localStorage.setItem('cvmn_tasks_multi_v7', JSON.stringify(state));
+  }
+
+  function updateMetrics() {
+    const rows = document.querySelectorAll('.task-row');
+    const total = rows.length;
+    let done = 0;
+    let teaDone = 0, teaTotal = 0;
+    let khangDone = 0, khangTotal = 0;
+    let nhanDone = 0, nhanTotal = 0;
+    let nhanvanDone = 0, nhanvanTotal = 0;
+    let taiDone = 0, taiTotal = 0;
+
+    rows.forEach(r => {
+      const cb = r.querySelector('.checkbox-custom');
+      const assignee = r.getAttribute('data-assignee');
+      const isChecked = cb && cb.checked;
+
+      if (isChecked) done++;
+
+      if (assignee === 'tea') {
+        teaTotal++;
+        if (isChecked) teaDone++;
+      } else if (assignee === 'nhan') {
+        nhanTotal++;
+        if (isChecked) nhanDone++;
+      } else if (assignee === 'khang') {
+        khangTotal++;
+        if (isChecked) khangDone++;
+      } else if (assignee === 'nhanvan') {
+        nhanvanTotal++;
+        if (isChecked) nhanvanDone++;
+      } else if (assignee === 'tai') {
+        taiTotal++;
+        if (isChecked) taiDone++;
+      }
+    });
+
+    const pending = total - done;
+    const percent = total > 0 ? Math.round((done / total) * 100) : 0;
+
+    document.getElementById('completedCount').textContent = done;
+    document.getElementById('pendingCount').textContent = pending;
+    document.getElementById('progressPercent').textContent = percent + '%';
+    document.getElementById('progressBar').style.width = percent + '%';
+
+    document.getElementById('tabAllCount').textContent = total;
+    document.getElementById('tabPendingCount').textContent = pending;
+    document.getElementById('tabDoneCount').textContent = done;
+
+    document.getElementById('personAllCount').textContent = total;
+    document.getElementById('personTeaCount').textContent = teaTotal;
+    document.getElementById('personNhanCount').textContent = nhanTotal;
+    document.getElementById('personKhangCount').textContent = khangTotal;
+    document.getElementById('personNhanvanCount').textContent = nhanvanTotal;
+    document.getElementById('personTaiCount').textContent = taiTotal;
+
+    document.getElementById('teaTaskSummary').textContent = `${teaDone}/${teaTotal} hoàn thành`;
+    document.getElementById('nhanTaskSummary').textContent = `${nhanDone}/${nhanTotal} hoàn thành`;
+    document.getElementById('khangTaskSummary').textContent = `${khangDone}/${khangTotal} hoàn thành`;
+    document.getElementById('nhanvanTaskSummary').textContent = `${nhanvanDone}/${nhanvanTotal} hoàn thành`;
+    document.getElementById('taiTaskSummary').textContent = `${taiDone}/${taiTotal} hoàn thành`;
+
+    // Update badges
+    document.getElementById('teaBadge').textContent = `${teaTotal} việc`;
+    document.getElementById('nhanBadge').textContent = `${nhanTotal} việc`;
+    document.getElementById('khangBadge').textContent = `${khangTotal} việc`;
+    document.getElementById('nhanvanBadge').textContent = `${nhanvanTotal} việc`;
+    document.getElementById('taiBadge').textContent = `${taiTotal} việc`;
+  }
+
+  function setPersonFilter(person, tabBtn) {
+    currentPerson = person;
+    document.querySelectorAll('.filter-group:first-child .filter-tab').forEach(t => t.classList.remove('active'));
+    tabBtn.classList.add('active');
+    applyFilter();
+  }
+
+  function filterByPerson(person) {
+    const tabMap = {
+      tea: 'tabPersonTea',
+      nhan: 'tabPersonNhan',
+      khang: 'tabPersonKhang',
+      nhanvan: 'tabPersonNhanvan',
+      tai: 'tabPersonTai'
+    };
+    const tabId = tabMap[person] || 'tabPersonAll';
+    const btn = document.getElementById(tabId);
+    if (btn) setPersonFilter(person, btn);
+  }
+
+  function setStatusFilter(status, tabBtn) {
+    currentStatus = status;
+    document.querySelectorAll('.filter-group:last-child .filter-tab').forEach(t => t.classList.remove('active'));
+    tabBtn.classList.add('active');
+    applyFilter();
+  }
+
+  function applyFilter() {
+    document.querySelectorAll('.task-row').forEach(row => {
+      const assignee = row.getAttribute('data-assignee');
+      const isDone = row.classList.contains('completed');
+
+      const matchPerson = (currentPerson === 'all') || (assignee === currentPerson);
+      const matchStatus = (currentStatus === 'all') || (currentStatus === 'pending' && !isDone) || (currentStatus === 'completed' && isDone);
+
+      if (matchPerson && matchStatus) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  function copyAssigneeText(person) {
+    let msg = "";
+    const date = "13/09/2026";
+
+    if (person === 'tea') {
+      msg = `📋 DANH SÁCH CÔNG VIỆC - TEA (${date})\n\n`;
+      const tasks = [
+        { title: "1. Gửi loa Aura đi sửa", id: "t1" },
+        { title: "2. Lấy loa Klipsch (kslip) về (còn bên sửa chưa xong)", id: "t2" }
+      ];
+      tasks.forEach(t => {
+        const cb = document.querySelector(`#row-${t.id} .checkbox-custom`);
+        const status = (cb && cb.checked) ? "✅ Hoàn thành" : "⏳ Chưa xong";
+        msg += `${t.title}\n👉 Trạng thái: ${status}\n\n`;
+      });
+        } else if (person === 'nhan') {
+      msg = `📋 DANH SÁCH CÔNG VIỆC - MR. NHÂN (${date})\n\n`;
+      const tasks = [
+        { title: "1. Cho hướng xử lý: Xác iPhone 11 64GB Trắng (IPHONE-03)", id: "nhan1" },
+        { title: "2. Cho hướng xử lý: Xác iPhone 11 Pro Max 64GB Gold (IPHONE-04)", id: "nhan2" },
+        { title: "3. Cho hướng xử lý: Xác Samsung Galaxy Note 20 Ultra Trắng (ANDROID-01)", id: "nhan3" },
+        { title: "4. Cho hướng xử lý: Samsung Galaxy S20 FE 8/256GB Blue (ANDROID-02)", id: "nhan4" },
+        { title: "5. Cho hướng xử lý: Xác Samsung Galaxy S21 FE Tím (ANDROID-03)", id: "nhan5" },
+        { title: "6. Cho hướng xử lý: Samsung Galaxy S22 Ultra 8/128GB Hồng (ANDROID-04)", id: "nhan6" },
+        { title: "7. Cho hướng xử lý: Google Pixel 6 Pro (ANDROID-10)", id: "nhan7" },
+        { title: "8. Cho hướng xử lý: Xiaomi Redmi Note 9 Pro (ANDROID-11)", id: "nhan8" },
+        { title: "9. Cho hướng xử lý: MacBook Pro 2019 13-inch (LT017)", id: "nhan9" },
+        { title: "10. Cho hướng xử lý: Laptop HP (LT016)", id: "nhan10" },
+        { title: "11. Cho hướng xử lý: Xác Laptop Acer - Lỗi màn (LT018)", id: "nhan11" },
+        { title: "12. Cho hướng xử lý: Xác Laptop Acer - Lỗi vỏ #1 (LT019)", id: "nhan12" },
+        { title: "13. Cho hướng xử lý: Xác Laptop Acer - Lỗi vỏ #2 (LT020)", id: "nhan13" }
+      ];
+      tasks.forEach(t => {
+        const cb = document.querySelector(`#row-${t.id} .checkbox-custom`);
+        const status = (cb && cb.checked) ? "✅ Hoàn thành" : "⏳ Chưa xong";
+        msg += `${t.title}\n👉 Trạng thái: ${status}\n\n`;
+      });
+    } else if (person === 'khang') {
+      msg = `📋 DANH SÁCH CÔNG VIỆC - MR. KHANG (${date})\n\n`;
+      const tasks = [
+        { title: "1. Đặt cap lens Nikon cho khách (Shopee - Kim Jay: 0923499590 - 39 Số 16, Phú Thọ, HCM)", id: "k1" },
+        { title: "2. Sửa Sony NEX 5 (Bản Nhật - Bị loạn cảm)", id: "k4" },
+        { title: "3. Sửa Canon 650D (Hư nút nguồn)", id: "k5" },
+        { title: "4. Xử lý sạc thỏi son dự phòng Anker", id: "k6" },
+        { title: "5. Xử lý máy ảnh Fuji X-A2 màu hồng (Bị bệt sensor)", id: "k8" },
+        { title: "6. Sửa lens Viltrox 23mm f/1.4", id: "k9" },
+        { title: "7. Sửa lens Kit Fuji", id: "k10" },
+        { title: "8. Thay pin Laptop HP (LT016 - SN: 558NP)", id: "k11" },
+        { title: "9. Đặt đệm tai 2 tai nghe Sony XM4", id: "k12" },
+        { title: "10. Đặt cap trên cho Lens Sony Zeiss Sonnar T* E 24mm F1.8 ZA", id: "k13" },
+        { title: "11. Đặt cap trên cho Lens Sony E 50mm F1.8 OSS", id: "k14" },
+        { title: "12. Đặt cap dưới Lens kit Fujifilm XC 16-50mm Mark II", id: "k15" },
+        { title: "13. Đặt cap hãng Lens TTArtisan AF 35mm f/1.8 ED for Fujifilm ngàm X", id: "k16" }
+      ];
+      tasks.forEach(t => {
+        const cb = document.querySelector(`#row-${t.id} .checkbox-custom`);
+        const status = (cb && cb.checked) ? "✅ Hoàn thành" : "⏳ Chưa xong";
+        msg += `${t.title}\n👉 Trạng thái: ${status}\n\n`;
+      });
+    } else if (person === 'nhanvan') {
+      msg = `📋 DANH SÁCH CÔNG VIỆC - NHÂN VĂN (${date})\n\n`;
+      const tasks = [
+        { title: "1. Hết khăn giấy khô", id: "nv1" },
+        { title: "2. Hết cột khí nhỏ", id: "nv2" },
+        { title: "3. Gần hết xốp bi", id: "nv3" },
+        { title: "4. Gần hết băng keo đỏ", id: "nv4" },
+        { title: "5. Gần hết hộp giấy", id: "nv5" },
+        { title: "6. Gần hết băng keo trong", id: "nv6" },
+        { title: "7. Gần hết tem bảo hành tròn", id: "nv7" },
+        { title: "8. Hết củ sạc 5V-1A", id: "nv8" },
+        { title: "9. Gần hết giấy in đơn A6", id: "nv9" }
+      ];
+      tasks.forEach(t => {
+        const cb = document.querySelector(`#row-${t.id} .checkbox-custom`);
+        const status = (cb && cb.checked) ? "✅ Hoàn thành" : "⏳ Chưa xong";
+        msg += `${t.title}\n👉 Trạng thái: ${status}\n\n`;
+      });
+    } else if (person === 'tai') {
+      msg = `📋 DANH SÁCH CÔNG VIỆC - TÀI (${date})\n\n`;
+      const tasks = [
+        { title: "1. Mua 2 chai Vim vệ sinh toilet", id: "tai1" },
+        { title: "2. Mua băng keo giấy", id: "tai2" },
+        { title: "3. Note mã số và tìm thông tin, SN các điện thoại A11", id: "tai3" },
+        { title: "4. Note mã số, tìm SN của iPhone XR 64GB MDM", id: "tai4" },
+        { title: "5. Note mã số, tìm SN của iPhone 11 Pro Max: pin thay new, còn giữ pin zin, a Nhân thu", id: "tai5" },
+        { title: "6. Note mã số, tìm SN của Sony WH-1000XM4 (72209)", id: "tai6" },
+        { title: "7. Note mã số, tìm SN của Bàn phím Dark Alien R83 (TBH)", id: "tai7" },
+        { title: "8. Note mã số, tìm SN của Máy ảnh Samsung WB1000F đỏ (04YSV)", id: "tai8" },
+        { title: "9. Note mã số, tìm SN của Canon R50 (04764)", id: "tai9" },
+        { title: "10. Note mã số, tìm SN của Lens Kit Canon 15-45mm (56986)", id: "tai10" },
+        { title: "11. Note mã số, tìm SN của Bàn phím ROG Falchion 65 (04903)", id: "tai11" },
+        { title: "12. Note mã số, tìm SN của PC đen (máy 1)", id: "tai12" },
+        { title: "13. Note mã số, tìm SN của PC đen (máy 2)", id: "tai13" },
+        { title: "14. Note mã số, tìm SN của Đồng hồ Oppo Watch (TBH)", id: "tai14" },
+        { title: "15. Note mã số, tìm SN của Insta360 Ace Pro (E9XNK)", id: "tai15" },
+        { title: "16. Note mã số, tìm SN của Laptop HP i5 Gen 10/8GB/512GB (558NP)", id: "tai16" },
+        { title: "17. Note mã số, tìm SN của MacBook Pro 2019 13-inch i5/8GB/128GB (WL40L)", id: "tai17" },
+        { title: "18. Note mã số, tìm SN của PS5 Slim bản Standard (78544)", id: "tai18" },
+        { title: "19. Note mã số, tìm SN của Tay cầm PS5 (47539)", id: "tai19" },
+        { title: "20. Note mã số, tìm SN của 2 Chuột Hàn Quốc", id: "tai20" },
+        { title: "21. Note mã số, tìm SN của Xác Laptop Acer - lỗi Màn (C7200)", id: "tai21a" },
+        { title: "22. Note mã số, tìm SN của Xác Laptop Acer - lỗi Vỏ (97200)", id: "tai21b" },
+        { title: "23. Note mã số, tìm SN của Xác Laptop Acer - lỗi Vỏ (57200)", id: "tai21c" },
+        { title: "24. Note mã số, tìm SN của iPad mini 7 - máy 1 (128GB)", id: "tai22a" },
+        { title: "25. Note mã số, tìm SN của iPad mini 7 - máy 2 (128GB)", id: "tai22b" },
+        { title: "26. Note mã số, tìm SN của Laptop Samsung - máy 1 (i5 Gen 8/8GB/256GB)", id: "tai23a" },
+        { title: "27. Note mã số, tìm SN của Laptop Samsung - máy 2 (i5 Gen 8/8GB/256GB)", id: "tai23b" },
+        { title: "28. Note mã số, tìm SN của Giá đỡ iPad - cái 1", id: "tai24a" },
+        { title: "29. Note mã số, tìm SN của Giá đỡ iPad - cái 2", id: "tai24b" }
+      ];
+      tasks.forEach(t => {
+        const cb = document.querySelector(`#row-${t.id} .checkbox-custom`);
+        const status = (cb && cb.checked) ? "✅ Hoàn thành" : "⏳ Chưa xong";
+        msg += `${t.title}\n👉 Trạng thái: ${status}\n\n`;
+      });
+    }
+
+    const nameMap = { tea: 'Tea', nhan: 'Mr. Nhân', khang: 'Mr. Khang', nhanvan: 'Nhân Văn', tai: 'Tài' };
+    navigator.clipboard.writeText(msg).then(() => {
+      showToast(`✅ Đã copy việc của ${nameMap[person]}!`);
+    }).catch(() => {
+      showToast("Đã sao chép!");
+    });
+  }
+
+  function showToast(text) {
+    const toast = document.getElementById('toast');
+    toast.textContent = text;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2200);
+  }
+
+  function resetTasks() {
+    if (confirm('Đặt lại toàn bộ công việc về "Chưa xong"?')) {
+      localStorage.removeItem('cvmn_tasks_multi_v7');
+      document.querySelectorAll('.checkbox-custom').forEach(cb => cb.checked = false);
+      document.querySelectorAll('.task-row').forEach(r => {
+        const id = r.getAttribute('data-id');
+        applyStyle(id, false);
+      });
+      updateMetrics();
+      applyFilter();
+      showToast("🔄 Đã đặt lại!");
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadState);
+</script>
+</body>
+</html>

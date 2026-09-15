@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SG TechRental - Quản Lý Đơn Thuê & Cọc Slot</title>
+    <!-- Thư viện html2canvas xuất file ảnh JPEG nét chuẩn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --border-focus: #6366f1;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-sub: #64748b;
+            --primary: #4f46e5;
+            --primary-light: #eef2ff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            
+            /* Pastel Palettes cho thiết bị */
+            --pastel-purple-bg: #f5f3ff;
+            --pastel-purple-border: #7c3aed;
+            --pastel-purple-text: #6d28d9;
+
+            --pastel-blue-bg: #f0f9ff;
+            --pastel-blue-border: #0284c7;
+            --pastel-blue-text: #0369a1;
+
+            --pastel-pink-bg: #fff1f2;
+            --pastel-pink-border: #e11d48;
+            --pastel-pink-text: #be123c;
+
+            --pastel-green-bg: #ecfdf5;
+            --pastel-green-border: #059669;
+            --pastel-green-text: #047857;
+
+            --pastel-amber-bg: #fffbeb;
+            --pastel-amber-border: #d97706;
+            --pastel-amber-text: #b45309;
+
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 12px;
+            
+            /* Font chữ theo yêu cầu: Times New Roman */
+            --font-main: "Times New Roman", Times, Georgia, serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.45;
+            -webkit-font-smoothing: antialiased;
+            padding: 10px 14px;
+            font-size: 15px;
+            width: 100%;
+        }
+
+        .wrapper {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* HEADER CHO ĐIỀU HƯỚNG CHUNG */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .page-header h1 {
+            font-size: 20px;
+            color: var(--primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-nav {
+            font-family: var(--font-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 14px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: var(--radius-sm);
+            border: 1px solid #4f46e5;
+            background: linear-gradient(135deg, #4f46e5, #4338ca);
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(79, 70, 229, 0.25);
+        }
+
+        .btn-nav:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.35);
+        }
+
+        /* TOOLBAR TÌM KIẾM NHẸ NHÀNG */
+        .toolbar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 8px 14px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .search-box input {
+            font-family: var(--font-main);
+            width: 100%;
+            padding: 6px 12px 6px 32px;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            outline: none;
+            background: #f8fafc;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        .search-box input:focus {
+            background: white;
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+        }
+
+        .search-box .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-sub);
+            font-size: 14px;
+        }
+
+        .filters-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .filter-select {
+            font-family: var(--font-main);
+            padding: 6px 10px;
+            font-size: 13.5px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: white;
+            color: var(--text-main);
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* TABLE CONTAINER */
+        .table-container {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+        }
+
+        .rental-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14.5px;
+        }
+
+        .rental-table thead {
+            background: #f1f5f9;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        .rental-table th {
+            padding: 9px 12px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #334155;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        .rental-table th.text-center {
+            text-align: center;
+        }
+
+        .rental-table th.text-right {
+            text-align: right;
+        }
+
+        /* SUB-HEADER ROW PHÂN CHIA NỘI DUNG THEO THÁNG */
+        .month-header-row td {
+            background: linear-gradient(90deg, #eef2ff, #f8fafc) !important;
+            padding: 7px 14px !important;
+            border-top: 2px solid #c7d2fe !important;
+            border-bottom: 1px solid #cbd5e1 !important;
+        }
+
+        .sub-header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sub-header-title {
+            font-size: 13.5px;
+            font-weight: bold;
+            color: #3730a3;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-count-badge {
+            font-size: 12px;
+            font-weight: bold;
+            color: #4f46e5;
+            background: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            border: 1px solid #c7d2fe;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .rental-table tbody tr.item-row {
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.12s ease;
+        }
+
+        .rental-table tbody tr.item-row:hover {
+            background: #f8faff;
+        }
+
+        .rental-table td {
+            padding: 9px 12px;
+            vertical-align: middle;
+        }
+
+        /* CỘT NGÀY THUÊ */
+        .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            font-weight: bold;
+            font-size: 13.5px;
+            color: #1e293b;
+            white-space: nowrap;
+        }
+
+        /* KHÁCH HÀNG + SỐ ĐIỆN THOẠI BÊN DƯỚI TÊN */
+        .customer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .customer-name {
+            font-weight: bold;
+            color: var(--text-main);
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        .customer-phone {
+            color: var(--primary);
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            white-space: nowrap;
+        }
+
+        .phone-missing {
+            color: var(--text-sub);
+            font-style: italic;
+            font-size: 12.5px;
+            white-space: nowrap;
+        }
+
+        /* SẢN PHẨM / THIẾT BỊ: Ô NHỎ, VIỀN ĐẬM, NỀN PASTEL */
+        .device-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .device-purple {
+            background-color: var(--pastel-purple-bg);
+            border: 2px solid var(--pastel-purple-border);
+            color: var(--pastel-purple-text);
+        }
+
+        .device-blue {
+            background-color: var(--pastel-blue-bg);
+            border: 2px solid var(--pastel-blue-border);
+            color: var(--pastel-blue-text);
+        }
+
+        .device-pink {
+            background-color: var(--pastel-pink-bg);
+            border: 2px solid var(--pastel-pink-border);
+            color: var(--pastel-pink-text);
+        }
+
+        .device-green {
+            background-color: var(--pastel-green-bg);
+            border: 2px solid var(--pastel-green-border);
+            color: var(--pastel-green-text);
+        }
+
+        .device-amber {
+            background-color: var(--pastel-amber-bg);
+            border: 2px solid var(--pastel-amber-border);
+            color: var(--pastel-amber-text);
+        }
+
+        /* CỘT HÌNH THỨC CỌC (CỘT RIÊNG) */
+        .deposit-method-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 9px;
+            border-radius: 14px;
+            font-size: 12.5px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .method-cash {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+
+        .method-item {
+            background: #faf5ff;
+            border: 1px solid #8b5cf6;
+            color: #6b21a8;
+        }
+
+        .method-warn {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+
+        /* CỘT TIỀN CỌC: CỌC MÁY NẰM BÊN DƯỚI TIỀN ĐÃ CỌC */
+        .money-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .money-deposit {
+            font-weight: bold;
+            color: #b45309;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .money-remaining {
+            font-weight: bold;
+            color: #4338ca;
+            font-size: 12.5px;
+            white-space: nowrap;
+        }
+
+        .money-fee {
+            font-weight: bold;
+            color: #0f172a;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        .surcharge-badge {
+            display: inline-block;
+            font-size: 11px;
+            background: #fff1f2;
+            color: #be123c;
+            border: 1px solid #fecdd3;
+            padding: 1px 5px;
+            border-radius: 4px;
+            margin-top: 2px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* TRẠNG THÁI */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 14px;
+            font-size: 12.5px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .badge-active { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        .badge-deposit { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+        .badge-completed { background: #dcfce7; color: #166534; border: 1px solid #22c55e; }
+        .badge-cancelled { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+
+        /* Ô GHI CHÚ: KHÔNG CÓ THÌ TRỐNG HOÀN TOÀN */
+        .note-box {
+            max-width: 280px;
+            font-size: 13px;
+            color: #475569;
+            background: #f8fafc;
+            border-left: 3px solid #cbd5e1;
+            padding: 2px 6px;
+            border-radius: 0 4px 4px 0;
+            line-height: 1.3;
+        }
+
+        .note-box.alert-note {
+            background: #fffbeb;
+            border-left-color: #f59e0b;
+            color: #92400e;
+            font-weight: 500;
+        }
+
+        /* NÚT XUẤT PHIẾU: MÀU XANH LÁ CÂY & CHỈ CÓ ICON 🎟️ */
+        .btn-green-icon {
+            font-family: var(--font-main);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            font-size: 17px;
+            border-radius: var(--radius-sm);
+            border: 1px solid #10b981;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 2px 5px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-green-icon:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: scale(1.06);
+            box-shadow: 0 3px 8px rgba(16, 185, 129, 0.35);
+        }
+
+        /* BUTTONS IN MODAL */
+        .btn {
+            font-family: var(--font-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            font-size: 13.5px;
+            font-weight: bold;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: white;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+        }
+
+        .btn-pink {
+            background: linear-gradient(135deg, #f43f5e, #fb7185);
+            color: white;
+            border-color: #f43f5e;
+            box-shadow: 0 2px 5px rgba(244, 63, 94, 0.2);
+        }
+
+        .btn-jpeg {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            border-color: #059669;
+            box-shadow: 0 2px 5px rgba(16, 185, 129, 0.25);
+        }
+
+        /* MODAL POPUP */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal-window {
+            background: white;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            max-height: 94vh;
+            animation: modalFadeIn 0.18s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fafafa;
+        }
+
+        .modal-header h3 {
+            font-size: 15.5px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-sub);
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .modal-body {
+            padding: 14px 16px;
+            overflow-y: auto;
+        }
+
+        .ticket-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .clean-ticket {
+            width: 100%;
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1.5px solid #cbd5e1;
+            box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+        }
+
+        .ticket-header {
+            padding: 14px 18px 10px 18px;
+            text-align: center;
+            background: #f8fafc;
+            border-bottom: 1.5px dashed #cbd5e1;
+        }
+
+        .ticket-brand {
+            font-size: 12px;
+            font-weight: bold;
+            color: #6366f1;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .ticket-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0f172a;
+            margin: 2px 0 1px 0;
+            letter-spacing: 0.02em;
+        }
+
+        .ticket-content {
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 14.5px;
+            background: #ffffff;
+        }
+
+        .ticket-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 10px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .ticket-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .ticket-label {
+            font-size: 14px;
+            color: #475569;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .ticket-val {
+            font-size: 15px;
+            font-weight: bold;
+            color: #0f172a;
+            text-align: right;
+        }
+
+        .ticket-highlight-box {
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border: 1.5px solid #f59e0b;
+            border-radius: 8px;
+            padding: 8px 12px;
+        }
+
+        .ticket-total-box {
+            background: linear-gradient(135deg, #eef2ff, #f3e8ff);
+            border: 1.5px solid #818cf8;
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ticket-footer {
+            padding: 10px 18px 12px 18px;
+            background: #f8fafc;
+            border-top: 1.5px dashed #cbd5e1;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* TOAST ALERT */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #0f172a;
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            font-size: 13.5px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 9999;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.25s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <!-- HEADER CHO ĐIỀU HƯỚNG CHUNG -->
+    <div class="page-header">
+        <h1>⚡ SG TechRental <span style="font-size: 14px; color: var(--text-muted); font-weight: normal; margin-left: 8px;">(Quản Lý Đơn Thuê & Cọc Slot)</span></h1>
+        <a href="index.html" class="btn-nav">📦 Trở về Quản Lý Kho</a>
+    </div>
+
+    <!-- TOOLBAR TÌM KIẾM NHẸ GỌN -->
+    <div class="toolbar">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" placeholder="Tìm theo tên khách hàng, số điện thoại, thiết bị thuê, ngày..." onkeyup="filterRentals()">
+        </div>
+        <div class="filters-group">
+            <select class="filter-select" id="filter-sort" onchange="filterRentals()">
+                <option value="date-asc">Sắp xếp: Ngày thuê (Gần nhất)</option>
+                <option value="date-desc">Sắp xếp: Ngày thuê (Xa nhất)</option>
+                <option value="price-desc">Sắp xếp: Tiền cọc máy cao</option>
+            </select>
+            <select class="filter-select" id="filter-device" onchange="filterRentals()">
+                <option value="all">Tất cả thiết bị</option>
+                <option value="iPhone 16">iPhone 16 Series</option>
+                <option value="iPhone 15">iPhone 15 Series</option>
+                <option value="iPhone 14">iPhone 14 Series</option>
+                <option value="Vivo">Vivo Series</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- BẢNG ĐƠN THUÊ & CỌC SLOT (CÓ SUB-HEADER PHÂN CHIA THEO THÁNG) -->
+    <div class="table-container">
+        <table class="rental-table">
+            <thead>
+                <tr>
+                    <th style="width: 100px;">Ngày Thuê</th>
+                    <th>Khách Hàng</th>
+                    <th>Thiết Bị Thuê</th>
+                    <th>Hình Thức Cọc</th>
+                    <th>Tiền Cọc</th>
+                    <th>Tổng Phí Thuê</th>
+                    <th>Trạng Thái</th>
+                    <th>Ghi Chú &amp; Phụ Thu</th>
+                    <th class="text-center" style="width: 60px;">Phiếu</th>
+                </tr>
+            </thead>
+            <tbody id="rentals-tbody">
+                <!-- Dynamic content -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- MODAL: THÔNG TIN CỌC SLOT & XUẤT JPEG -->
+<div class="modal-backdrop" id="ticketModal">
+    <div class="modal-window">
+        <div class="modal-header">
+            <h3><span>🎟️</span> THÔNG TIN CỌC SLOT</h3>
+            <div style="display: flex; gap: 6px; align-items: center;">
+                <button class="btn btn-jpeg" onclick="exportTicketJPEG()" title="Tải ảnh JPEG sắc nét">
+                    <span>🖼️</span> Xuất JPEG
+                </button>
+                <button class="btn btn-pink" onclick="copyTicketText()" title="Sao chép nội dung text gửi Zalo">
+                    <span>📋</span> Copy Text
+                </button>
+                <button class="modal-close" onclick="closeModal('ticketModal')">&times;</button>
+            </div>
+        </div>
+        <div class="modal-body" id="ticketContent">
+            <!-- Dynamic Ticket Card -->
+        </div>
+    </div>
+</div>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="appToast">
+    <span id="toastIcon">✅</span>
+    <span id="toastMsg">Thao tác thành công!</span>
+</div>
+
+<script>
+// --- DANH SÁCH KHÁCH HÀNG & ĐƠN THUÊ THEO CÁC THÁNG ---
+const RENTAL_LIST = [
+    // --- THÁNG 8 ---
+    {
+        id: 'HD-001',
+        customer: 'Nhật Linh',
+        phone: '0903015057',
+        device: 'Vivo x100s',
+        rentalDates: '01/08 - 03/08',
+        dateSortKey: '08-01-a',
+        depositPre: 200000,
+        depositRem: 13800000,
+        depositType: 'Tiền mặt / CK',
+        totalFee: 495000,
+        surcharge: 0,
+        status: 'Đã Nhận Lại Máy',
+        notes: ''
+    },
+    {
+        id: 'HD-002',
+        customer: 'Nguyễn Thư',
+        phone: '0332235894',
+        device: 'iPhone 15 pro max',
+        rentalDates: '01/08 - 02/08',
+        dateSortKey: '08-01-b',
+        depositPre: 200000,
+        depositRem: 23800000,
+        depositType: 'Cọc bằng MacBook Pro',
+        totalFee: 620000,
+        surcharge: 0,
+        status: 'Đã Nhận Lại Máy',
+        notes: 'nhận 420k tiền mặt ( đã trừ 200k slot), đã ck chị Mai Anh'
+    },
+    {
+        id: 'HD-003',
+        customer: 'My',
+        phone: '0862563957',
+        device: 'iPhone 15 pro max',
+        rentalDates: '01/08 - 02/08',
+        dateSortKey: '08-01-c',
+        depositPre: 200000,
+        depositRem: 23800000,
+        depositType: 'Tiền mặt / CK',
+        totalFee: 930000,
+        surcharge: 310000,
+        status: 'Đã Nhận Lại Máy',
+        notes: 'a Khang đưa a Nhân'
+    },
+    {
+        id: 'HD-004',
+        customer: 'Quốc Dũng',
+        phone: '',
+        device: 'Insta Go Ultra x2',
+        rentalDates: '08/08',
+        dateSortKey: '08-08',
+        depositPre: 0,
+        depositRem: 0,
+        depositType: 'Full tiền - Không cọc',
+        totalFee: 300000,
+        surcharge: 0,
+        status: 'Đã Nhận Lại Máy',
+        notes: ''
+    },
+    {
+        id: 'HD-005',
+        customer: 'Thu Trà',
+        phone: '0978524986',
+        device: 'Vivo X200 pro',
+        rentalDates: '12/08 - 16/08',
+        dateSortKey: '08-11',
+        depositPre: 0,
+        depositRem: 1600000,
+        depositType: 'ĐT, Laptop, Tiền 1.6M',
+        totalFee: 2140000,
+        surcharge: 190000,
+        status: 'Đã Nhận Lại Máy',
+        notes: ''
+    },
+    {
+        id: 'HD-006',
+        customer: 'Tuyết Hoa',
+        phone: '0364426173',
+        device: 'Micro Rode Me',
+        rentalDates: '13/08',
+        dateSortKey: '08-13',
+        depositPre: 0,
+        depositRem: 15000000,
+        depositType: 'Cọc bằng Laptop 15M',
+        totalFee: 170000,
+        surcharge: 100000,
+        status: 'Đã Nhận Lại Máy',
+        notes: 'lấy sớm phụ thu 30k, thuê thêm 1 ngày 70k'
+    },
+    {
+        id: 'HD-007',
+        customer: 'Kiên Võ',
+        phone: '',
+        device: 'Action 5 Pro',
+        rentalDates: '15/08 - 17/08',
+        dateSortKey: '08-14',
+        depositPre: 200000,
+        depositRem: 5000000,
+        depositType: 'Tiền mặt / CK',
+        totalFee: 300000,
+        surcharge: 0,
+        status: 'Đã Nhận Lại Máy',
+        notes: 'thuê T7, lấy tối T6 (phụ thu 60k), trả trưa CN (80k)'
+    },
+    {
+        id: 'HD-008',
+        customer: 'Hữu Tính',
+        phone: '',
+        device: 'Action 5 Pro',
+        rentalDates: '20/08 - 23/08',
+        dateSortKey: '08-20',
+        depositPre: 200000,
+        depositRem: 5000000,
+        depositType: 'Cọc full tiền',
+        totalFee: 580000,
+        surcharge: 0,
+        status: 'Đã Nhận Lại Máy',
+        notes: ''
+    },
+    {
+        id: 'HD-009',
+        customer: 'Bảo Trâm',
+        phone: '0976555111',
+        device: 'Vivo x100s',
+        rentalDates: '23/08',
+        dateSortKey: '08-22',
+        depositPre: 200000,
+        depositRem: 13800000,
+        depositType: 'Laptop cyborg 15 a12ve',
+        totalFee: 310000,
+        surcharge: 120000,
+        status: 'Đã Nhận Lại Máy',
+        notes: 'Ngày thuê : ngày 23 ( tối 22 lấy sớm trả trễ vào sáng ngày 24 phụ thu tổng 120k)'
+    },
+    {
+        id: 'HD-010',
+        customer: 'Thanh Duy',
+        phone: '0822942039',
+        device: 'Samsung S24 Ultra',
+        rentalDates: '24/08',
+        dateSortKey: '08-23',
+        depositPre: 200000,
+        depositRem: 20000000,
+        depositType: '2 Laptop & Hộ chiếu',
+        totalFee: 420000,
+        surcharge: 0,
+        status: 'Đã Nhận Lại Máy',
+        notes: ''
+    },
+
+    // --- THÁNG 9 ---
+    {
+        id: 'HD-104',
+        customer: 'Dương Nguyễn Hà Trang',
+        phone: '',
+        device: 'iPhone 16 pro max',
+        rentalDates: '10/09 - 11/09',
+        dateSortKey: '09-10',
+        depositPre: 200000,
+        depositRem: 31800000,
+        depositType: 'Cọc bằng MacBook Air M3',
+        totalFee: 940000,
+        surcharge: 0,
+        status: 'Đã Nhận Lại Máy',
+        notes: ''
+    },
+    {
+        id: 'HD-090',
+        customer: 'Thỏ con xinh láo',
+        phone: '0867091467',
+        device: 'iPhone 14 pro max',
+        rentalDates: '12/09',
+        dateSortKey: '09-12',
+        depositPre: 200000,
+        depositRem: 21800000,
+        depositType: 'Không đủ tiền cọc',
+        totalFee: 260000,
+        surcharge: 0,
+        status: 'Hủy thuê thiếu cọc',
+        notes: ''
+    },
+
+    // --- THÁNG 10 ---
+    {
+        id: 'HD-105',
+        customer: 'Lê Thị My',
+        phone: '0772978810',
+        device: 'iphone 16 pro max',
+        rentalDates: '17/10',
+        dateSortKey: '10-17-a',
+        depositPre: 200000,
+        depositRem: 31800000,
+        depositType: 'Tiền mặt / CK',
+        totalFee: 490000,
+        surcharge: 100000,
+        status: 'Đã cọc chờ nhận',
+        notes: 'lấy 13h 17/10 - 17-18/10(lấy sớm ngày chiều 16 phụ thu 100.000)'
+    },
+    {
+        id: 'HD-102',
+        customer: 'mgc',
+        phone: '',
+        device: 'iPhone 15 pro max',
+        rentalDates: '17/10',
+        dateSortKey: '10-17-b',
+        depositPre: 200000,
+        depositRem: 23800000,
+        depositType: 'Tiền mặt / CK',
+        totalFee: 330000,
+        surcharge: 0,
+        status: 'Đã cọc chờ nhận',
+        notes: ''
+    },
+    {
+        id: 'HD-103',
+        customer: 'Thu Thuỷ',
+        phone: '0585789594',
+        device: 'iPhone 14 pro max',
+        rentalDates: '17/10 - 18/10',
+        dateSortKey: '10-17-c',
+        depositPre: 200000,
+        depositRem: 21800000,
+        depositType: 'Tiền mặt / CK',
+        totalFee: 580000,
+        surcharge: 100000,
+        status: 'Đã cọc chờ nhận',
+        notes: 'lấy sớm ngày chiều 16 phụ thu 100.000'
+    },
+    {
+        id: 'HD-101',
+        customer: 'Anh Ngọc',
+        phone: '0902227207',
+        device: 'Vivo x100s',
+        rentalDates: '18/10',
+        dateSortKey: '10-18',
+        depositPre: 200000,
+        depositRem: 13800000,
+        depositType: 'Tiền mặt / CK',
+        totalFee: 280000,
+        surcharge: 90000,
+        status: 'Đã cọc chờ nhận',
+        notes: 'trả trước 14h ngày hôm sau phụ thu 90k'
+    }
+];
+
+let currentViewingTicket = null;
+
+function formatVND(num) {
+    if (!num && num !== 0) return '0 đ';
+    return Number(num).toLocaleString('vi-VN') + ' đ';
+}
+
+function showToast(msg, icon = '✅') {
+    const toast = document.getElementById('appToast');
+    document.getElementById('toastIcon').textContent = icon;
+    document.getElementById('toastMsg').textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+function getDevicePaletteClass(deviceName) {
+    const name = (deviceName || '').toLowerCase();
+    if (name.includes('16')) return 'device-purple';
+    if (name.includes('15')) return 'device-blue';
+    if (name.includes('14')) return 'device-pink';
+    if (name.includes('vivo') || name.includes('s24')) return 'device-green';
+    return 'device-amber';
+}
+
+function getDeviceIcon(deviceName) {
+    const name = (deviceName || '').toLowerCase();
+    if (name.includes('iphone') || name.includes('vivo') || name.includes('promax') || name.includes('s24')) return '📱';
+    if (name.includes('sony') || name.includes('ảnh') || name.includes('action') || name.includes('insta')) return '📷';
+    if (name.includes('gimbal') || name.includes('dji')) return '🎥';
+    if (name.includes('rode') || name.includes('mic')) return '🎙️';
+    return '⚡';
+}
+
+// --- RENDER BẢNG VỚI SUB-HEADER PHÂN CHIA NỘI DUNG THEO TỪNG THÁNG ---
+function renderTable(list = null) {
+    let items = list !== null ? [...list] : [...RENTAL_LIST];
+
+    const sortVal = document.getElementById('filter-sort') ? document.getElementById('filter-sort').value : 'date-asc';
+    if (sortVal === 'date-asc') {
+        items.sort((a, b) => (a.dateSortKey || a.rentalDates).localeCompare(b.dateSortKey || b.rentalDates));
+    } else if (sortVal === 'date-desc') {
+        items.sort((a, b) => (b.dateSortKey || b.rentalDates).localeCompare(a.dateSortKey || a.rentalDates));
+    } else if (sortVal === 'price-desc') {
+        items.sort((a, b) => (b.depositRem || 0) - (a.depositRem || 0));
+    }
+
+    const tbody = document.getElementById('rentals-tbody');
+    tbody.innerHTML = '';
+
+    if (items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 24px; color: #64748b;">Không tìm thấy kết quả phù hợp</td></tr>`;
+        return;
+    }
+
+    let lastMonthKey = null;
+
+    items.forEach(item => {
+        const monthKey = (item.dateSortKey || '').slice(0, 2);
+
+        // NẾU SANG THÁNG MỚI -> CHÈN THÊM ROW SUB-HEADER ĐỂ CÁCH NỘI DUNG RA
+        if (monthKey && monthKey !== lastMonthKey) {
+            lastMonthKey = monthKey;
+            const monthItems = items.filter(x => (x.dateSortKey || '').startsWith(monthKey));
+            
+            const monthTr = document.createElement('tr');
+            monthTr.className = 'month-header-row';
+            monthTr.innerHTML = `
+                <td colspan="9">
+                    <div class="sub-header-content">
+                        <span class="sub-header-title">📅 THÁNG ${monthKey} / 2026</span>
+                        <span class="sub-count-badge">${monthItems.length} đơn thuê</span>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(monthTr);
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = 'item-row';
+
+        // Hình thức cọc badge ở 1 cột riêng
+        let methodClass = 'method-cash';
+        let methodIcon = '💵';
+        if (item.depositType && (item.depositType.includes('MacBook') || item.depositType.includes('Laptop') || item.depositType.includes('hộ chiếu'))) {
+            methodClass = 'method-item';
+            methodIcon = '💻';
+        } else if (item.depositType && item.depositType.includes('Không đủ')) {
+            methodClass = 'method-warn';
+            methodIcon = '⚠️';
+        }
+
+        // SĐT nằm bên dưới tên khách hàng
+        const phoneDisplay = item.phone 
+            ? `<a href="tel:${item.phone}" class="customer-phone">📞 ${item.phone}</a>`
+            : `<span class="phone-missing">Chưa có SĐT</span>`;
+
+        let surchargeBadge = '';
+        if (item.surcharge && item.surcharge > 0) {
+            surchargeBadge = `<div class="surcharge-badge">⚡ Phụ thu: +${formatVND(item.surcharge)}</div>`;
+        }
+
+        const paletteClass = getDevicePaletteClass(item.device);
+        const deviceIcon = getDeviceIcon(item.device);
+
+        let statusBadge = `<span class="badge badge-deposit">⏳ ${item.status}</span>`;
+        if (item.status.includes('Đã Nhận')) {
+            statusBadge = `<span class="badge badge-completed">✅ ${item.status}</span>`;
+        } else if (item.status.includes('Hủy')) {
+            statusBadge = `<span class="badge badge-cancelled">❌ ${item.status}</span>`;
+        }
+
+        // Ghi chú: nếu không có thì để TRỐNG HOÀN TOÀN
+        const hasNote = item.notes && item.notes.trim() !== '';
+        const noteHtml = hasNote 
+            ? `<div class="note-box ${item.surcharge > 0 ? 'alert-note' : ''}">${item.notes}</div>`
+            : '';
+
+        tr.innerHTML = `
+            <!-- CỘT 1: NGÀY THUÊ (DẠNG dd/mm) -->
+            <td>
+                <span class="date-badge">🗓️ ${item.rentalDates}</span>
+            </td>
+            <!-- CỘT 2: KHÁCH HÀNG (SĐT ĐỂ BÊN DƯỚI TÊN KHÁCH HÀNG) -->
+            <td>
+                <div class="customer-info">
+                    <div class="customer-name">${item.customer}</div>
+                    ${phoneDisplay}
+                </div>
+            </td>
+            <!-- CỘT 3: THIẾT BỊ THUÊ (Ô NHỎ VIỀN ĐẬM NỀN PASTEL) -->
+            <td>
+                <div class="device-box ${paletteClass}">
+                    <span>${deviceIcon}</span>
+                    <span>${item.device}</span>
+                </div>
+            </td>
+            <!-- CỘT 4: HÌNH THỨC CỌC (CỘT RIÊNG) -->
+            <td>
+                <span class="deposit-method-badge ${methodClass}">
+                    <span>${methodIcon}</span>
+                    <span>${item.depositType || 'Tiền mặt / CK'}</span>
+                </span>
+            </td>
+            <!-- CỘT 5: TIỀN CỌC (CỌC MÁY CÒN LẠI NẰM BÊN DƯỚI TIỀN ĐÃ CỌC) -->
+            <td>
+                <div class="money-cell">
+                    <div class="money-deposit">${formatVND(item.depositPre)}</div>
+                    <div class="money-remaining">Cọc máy: ${formatVND(item.depositRem)}</div>
+                </div>
+            </td>
+            <!-- CỘT 6: TỔNG PHÍ THUÊ -->
+            <td>
+                <div class="money-fee">${formatVND(item.totalFee)}</div>
+                ${surchargeBadge}
+            </td>
+            <!-- CỘT 7: TRẠNG THÁI -->
+            <td>${statusBadge}</td>
+            <!-- CỘT 8: GHI CHÚ NẾU KHÔNG CÓ THÌ TRỐNG -->
+            <td>${noteHtml}</td>
+            <!-- CỘT 9: PHIẾU IN - MÀU XANH LÁ & CHỈ CÓ ICON 🎟️ -->
+            <td class="text-center">
+                <button class="btn-green-icon" onclick="openTicketModal('${item.id}')" title="Xem THÔNG TIN CỌC SLOT & Xuất ảnh JPEG">
+                    🎟️
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// --- FILTERING ---
+function filterRentals() {
+    const q = document.getElementById('search-input').value.toLowerCase().trim();
+    const devFilter = document.getElementById('filter-device').value;
+
+    const filtered = RENTAL_LIST.filter(item => {
+        const matchText = (item.customer && item.customer.toLowerCase().includes(q)) ||
+                          (item.phone && item.phone.includes(q)) ||
+                          (item.device && item.device.toLowerCase().includes(q)) ||
+                          (item.rentalDates && item.rentalDates.toLowerCase().includes(q)) ||
+                          (item.notes && item.notes.toLowerCase().includes(q));
+
+        const matchDev = devFilter === 'all' || item.device.toLowerCase().includes(devFilter.toLowerCase());
+
+        return matchText && matchDev;
+    });
+
+    renderTable(filtered);
+}
+
+// --- PHIẾU IN THÔNG TIN CỌC SLOT ---
+function openTicketModal(id) {
+    const item = RENTAL_LIST.find(r => r.id === id);
+    if (!item) return;
+    currentViewingTicket = item;
+
+    const container = document.getElementById('ticketContent');
+    const paletteClass = getDevicePaletteClass(item.device);
+    const deviceIcon = getDeviceIcon(item.device);
+
+    const hasNote = item.notes && item.notes.trim() !== '';
+    const noteSectionHtml = hasNote ? `
+        <div class="ticket-row" style="flex-direction: column; align-items: flex-start; gap: 2px; background: #fafafa; padding: 6px 10px; border-radius: 6px; border: 1px dashed #cbd5e1;">
+            <span class="ticket-label" style="color: #b91c1c;">📝 Ghi chú:</span>
+            <span style="font-size: 13.5px; color: #334155; line-height: 1.35;">${item.notes}</span>
+        </div>
+    ` : '';
+
+    container.innerHTML = `
+        <div class="ticket-wrapper">
+            <div class="clean-ticket" id="printTicketCard">
+                <div class="ticket-header">
+                    <div class="ticket-brand">⚡ SG TechRental • CHO THUÊ ĐỒ CÔNG NGHỆ ⚡</div>
+                    <div class="ticket-title">THÔNG TIN CỌC SLOT</div>
+                </div>
+
+                <div class="ticket-content">
+                    <!-- TIỀN NHẬN CỌC TRƯỚC -->
+                    <div class="ticket-row" style="background: #f0fdf4; padding: 8px 12px; border-radius: 8px; border: 1.5px solid #86efac;">
+                        <span class="ticket-label" style="color: #166534; font-size: 14.5px;">🌸 Mình nhận cọc:</span>
+                        <span class="ticket-val" style="color: #15803d; font-size: 16.5px; font-weight: bold;">
+                            ${formatVND(item.depositPre)}
+                        </span>
+                    </div>
+
+                    <!-- PHẦN CỌC MÁY CÒN LẠI -->
+                    <div class="ticket-highlight-box">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                            <span class="ticket-label" style="color: #92400e; font-size: 14.5px;">🛡️ Phần cọc máy còn lại:</span>
+                            <span class="ticket-val" style="color: #b45309; font-size: 17px; font-weight: bold;">
+                                ${formatVND(item.depositRem)}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- BẠN (KHÁCH HÀNG) -->
+                    <div class="ticket-row">
+                        <span class="ticket-label">👤 Bạn:</span>
+                        <span class="ticket-val" style="font-size: 15.5px; color: #1e1b4b;">${item.customer}</span>
+                    </div>
+
+                    <!-- SỐ ĐIỆN THOẠI -->
+                    <div class="ticket-row">
+                        <span class="ticket-label">📞 Sdt:</span>
+                        <span class="ticket-val" style="color: #4338ca;">${item.phone || 'Chưa cập nhật'}</span>
+                    </div>
+
+                    <!-- SẢN PHẨM THIẾT BỊ -->
+                    <div class="ticket-row" style="align-items: center;">
+                        <span class="ticket-label">📱 Sp :</span>
+                        <div class="device-box ${paletteClass}">
+                            <span>${deviceIcon}</span>
+                            <span>${item.device}</span>
+                        </div>
+                    </div>
+
+                    <!-- NGÀY THUÊ -->
+                    <div class="ticket-row">
+                        <span class="ticket-label">🗓️ Ngày thuê :</span>
+                        <span class="ticket-val" style="background: #f1f5f9; padding: 2px 7px; border-radius: 4px;">
+                            ${item.rentalDates}
+                        </span>
+                    </div>
+
+                    <!-- HÌNH THỨC CỌC -->
+                    <div class="ticket-row">
+                        <span class="ticket-label">💳 Hình thức cọc :</span>
+                        <span class="ticket-val" style="color: #6b21a8;">
+                            ${item.depositType || 'Tiền mặt / CK'}
+                        </span>
+                    </div>
+
+                    <!-- GHI CHÚ -->
+                    ${noteSectionHtml}
+
+                    <!-- TỔNG PHÍ -->
+                    <div class="ticket-total-box">
+                        <span style="font-size: 15px; font-weight: bold; color: #4338ca;">💰 Tổng phí :</span>
+                        <span style="font-size: 19px; font-weight: bold; color: #312e81;">
+                            ${formatVND(item.totalFee)}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="ticket-footer">
+                    <div>✨ Cảm ơn bạn đã tin tưởng dịch vụ tại SG TechRental ✨</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('ticketModal').classList.add('show');
+}
+
+// XUẤT ẢNH JPEG CHẤT LƯỢNG CAO
+function exportTicketJPEG() {
+    const card = document.getElementById('printTicketCard');
+    if (!card) return;
+
+    showToast('Đang tạo ảnh JPEG...', '⏳');
+
+    if (window.html2canvas) {
+        html2canvas(card, {
+            scale: 3,
+            useCORS: true,
+            backgroundColor: '#ffffff'
+        }).then(canvas => {
+            const link = document.createElement('a');
+            const safeName = (currentViewingTicket?.customer || 'khach').replace(/[^a-zA-Z0-9\u00C0-\u1EF9]/g, '_');
+            link.download = `SG_TechRental_Coc_Slot_${safeName}.jpeg`;
+            link.href = canvas.toDataURL('image/jpeg', 0.95);
+            link.click();
+            showToast('Đã tải ảnh JPEG thành công!', '🖼️');
+        }).catch(err => {
+            console.error(err);
+            showToast('Lỗi khi xuất ảnh', '❌');
+        });
+    } else {
+        window.print();
+    }
+}
+
+// COPY TEXT NHANH GỬI ZALO
+function copyTicketText() {
+    if (!currentViewingTicket) return;
+    const item = currentViewingTicket;
+
+    let text = `Mình nhận cọc ${formatVND(item.depositPre)}
+
+Phần cọc máy còn lại: ${formatVND(item.depositRem)}
+
+Bạn: ${item.customer}
+
+Sdt: ${item.phone || '(Chưa cập nhật)'}
+
+Sp : ${item.device}
+
+Ngày thuê : ${item.rentalDates}
+
+Hình thức cọc : ${item.depositType || 'Tiền mặt / CK'}`;
+
+    if (item.notes && item.notes.trim() !== '') {
+        text += `\n\nghi chú: ${item.notes}`;
+    }
+
+    text += `\n\nTổng phí : ${formatVND(item.totalFee)}`;
+
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('Đã sao chép text mẫu gửi Zalo!', '📋');
+    }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast('Đã sao chép text!', '📋');
+    });
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('show');
+}
+
+// Khởi chạy khi load trang
+window.addEventListener('DOMContentLoaded', () => {
+    renderTable();
+});
+</script>
+</body>
+</html>
