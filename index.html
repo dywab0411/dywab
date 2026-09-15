@@ -49,7 +49,7 @@
         }
 
         .container {
-            max-width: 1560px;
+            width: 100%;
             margin: 0 auto;
         }
 
@@ -507,7 +507,7 @@
             color: var(--text-main);
             font-size: 13.5px;
             line-height: 1.4;
-            max-width: 360px;
+            max-width: none;
         }
 
         .product-cat {
@@ -522,7 +522,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
-            max-width: 440px;
+            max-width: none;
         }
 
         .tag {
@@ -589,6 +589,13 @@
             border-color: #e9d5ff;
         }
 
+        .tag-post {
+            background: #fef9c3;
+            color: #854d0e;
+            border-color: #facc15;
+            font-weight: 700;
+        }
+
         /* PRICE CELL */
         .price-cell {
             text-align: right;
@@ -640,7 +647,7 @@
             border-radius: var(--radius-md);
             padding: 8px 12px;
             font-size: 12.5px;
-            max-width: 290px;
+            max-width: none;
             position: relative;
             transition: all 0.2s;
         }
@@ -1001,7 +1008,8 @@
             }
         }
     </style>
-</head>
+
+    </head>
 <body>
     <div class="container">
         <!-- HEADER -->
@@ -1014,6 +1022,12 @@
                 </div>
             </div>
             <div class="header-actions">
+                <a href="cvmn.html" class="btn" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; text-decoration: none;">
+                    📋 Quản Lý Công Việc
+                </a>
+                <a href="rental.html" class="btn" style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; text-decoration: none;">
+                    🔄 Chuyển sang Cho Thuê
+                </a>
                 <button class="btn" onclick="exportCSV()">
                     📥 Xuất Excel / CSV
                 </button>
@@ -1119,6 +1133,7 @@
                         <th style="width: 100px; text-align: center;">MÃ SỐ</th>
                         <th style="width: 350px;">TÊN SẢN PHẨM</th>
                         <th>THÔNG TIN & TÌNH TRẠNG</th>
+                            <th style="width: 120px; text-align: center;">ĐĂNG BÁN</th>
                         <th class="text-right" style="width: 200px;">ĐƠN GIÁ</th>
                         <th style="width: 280px;">CHI TIẾT KHÁCH HÀNG</th>
                     </tr>
@@ -7297,7 +7312,7 @@
         "Location": "Kho",
         "LastUpdated": "13/09/2026",
         "PriceNote": "Cũ, nguyên zin, màn 2 chấm trắng, pin chai. Kèm sạc",
-        "DisplayNumber": 16
+        "DisplayNumber": 6
     },
     {
         "SKU": "LT017",
@@ -7309,7 +7324,7 @@
         "Location": "Khu sửa chữa",
         "LastUpdated": "13/09/2026",
         "PriceNote": "Hư màn, ngoại hình cấn. Sạc: A Khang chưa bàn giao",
-        "DisplayNumber": 17
+        "DisplayNumber": 2
     },
     {
         "SKU": "PS016",
@@ -7369,7 +7384,7 @@
         "Location": "Khu sửa chữa",
         "LastUpdated": "13/09/2026",
         "PriceNote": "Lỗi màn (vỏ không hư). Chai pin, cũ, không sạc. Nâng cấp RAM được",
-        "DisplayNumber": 18
+        "DisplayNumber": 7
     },
     {
         "SKU": "LT019",
@@ -7381,7 +7396,7 @@
         "Location": "Khu sửa chữa",
         "LastUpdated": "13/09/2026",
         "PriceNote": "Lỗi/hư vỏ. Chai pin, cũ, không sạc. Nâng cấp RAM được",
-        "DisplayNumber": 19
+        "DisplayNumber": 8
     },
     {
         "SKU": "LT020",
@@ -7393,7 +7408,7 @@
         "Location": "Khu sửa chữa",
         "LastUpdated": "13/09/2026",
         "PriceNote": "Lỗi/hư vỏ. Chai pin, cũ, không sạc. Nâng cấp RAM được",
-        "DisplayNumber": 20
+        "DisplayNumber": 9
     },
     {
         "SKU": "TAB002",
@@ -7429,7 +7444,7 @@
         "Location": "Kho",
         "LastUpdated": "13/09/2026",
         "PriceNote": "Bàn phím Hàn, phím bóng, cũ, pin new. Kèm sạc + túi",
-        "DisplayNumber": 21
+        "DisplayNumber": 10
     },
     {
         "SKU": "LT022",
@@ -7441,7 +7456,7 @@
         "Location": "Kho",
         "LastUpdated": "13/09/2026",
         "PriceNote": "Bàn phím Hàn, phím bóng, cũ, pin new. Kèm sạc + túi",
-        "DisplayNumber": 22
+        "DisplayNumber": 11
     },
     {
         "SKU": "STAND001",
@@ -7524,7 +7539,8 @@
         "channel": "Đã bán",
         "date": "13/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "CTRL002": {
         "name": "Khách lẻ",
@@ -7532,7 +7548,8 @@
         "channel": "Đã bán",
         "date": "13/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "CTRL003": {
         "name": "Khách lẻ",
@@ -7540,7 +7557,8 @@
         "channel": "Đã bán",
         "date": "13/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "CTRL008": {
         "name": "Khách lẻ",
@@ -7548,7 +7566,8 @@
         "channel": "Đã bán",
         "date": "13/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "CTRL010": {
         "name": "Khách lẻ",
@@ -7556,7 +7575,8 @@
         "channel": "Đã bán",
         "date": "13/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "CTRL011": {
         "name": "Khách lẻ",
@@ -7564,7 +7584,8 @@
         "channel": "Đã bán",
         "date": "13/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "CTRL014": {
         "name": "Khách lẻ",
@@ -7572,15 +7593,11 @@
         "channel": "Đã bán",
         "date": "13/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "PS007": {
-        "name": "Anh Cường",
-        "phone": "",
-        "channel": "Đã bán",
-        "date": "06/09/2026",
-        "address": "",
-        "status": "Đã giao & thanh toán"
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "CAM038": {
         "name": "Đức Lộc",
@@ -7708,7 +7725,8 @@
         "channel": "Đã bán",
         "date": "04/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK019": {
         "name": "Do Hoang Anh",
@@ -7716,7 +7734,8 @@
         "channel": "Đã bán",
         "date": "04/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "PK004": {
         "name": "bạn của Chấn",
@@ -7764,7 +7783,8 @@
         "channel": "Đã bán",
         "date": "04/09/2026",
         "address": "",
-        "status": "Đã bán"
+        "status": "Đã bán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK-XB04": {
         "name": "Khách lẻ",
@@ -7772,7 +7792,8 @@
         "channel": "Đã bán",
         "date": "04/09/2026",
         "address": "",
-        "status": "Đã bán"
+        "status": "Đã bán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK-XB07": {
         "name": "Khách lẻ",
@@ -7780,7 +7801,8 @@
         "channel": "Đã bán",
         "date": "04/09/2026",
         "address": "",
-        "status": "Đã bán"
+        "status": "Đã bán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK-XB08": {
         "name": "Khách lẻ",
@@ -7788,7 +7810,8 @@
         "channel": "Đã bán",
         "date": "04/09/2026",
         "address": "",
-        "status": "Đã bán"
+        "status": "Đã bán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "CPT-SNY-08": {
         "name": "Khách lẻ",
@@ -7967,11 +7990,11 @@
         "status": "Đã giao & thanh toán"
     },
     "LT003": {
-        "name": "triệu thị Thanh",
-        "phone": "0372150129",
+        "name": "Anh Thanh",
+        "phone": "0903240377",
         "channel": "Đã bán",
-        "date": "06/09/2026",
-        "address": "công ty FLecon kcn Thuỵ Vân - Việt trì - Phú thọ",
+        "date": "12/09/2026",
+        "address": "814 Nơ 8 Khu đô thị Pháp Vân, Hoàng Liệt, Hoàng Mai, Hà Nội",
         "status": "Đã giao & thanh toán"
     },
     "DSK028": {
@@ -7980,7 +8003,8 @@
         "channel": "Đã bán",
         "date": "07/09/2026",
         "address": "số 7 Nguyễn Thị Định - Trung Hòa - Cầu Giấy - Hà Nội",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK018": {
         "name": "Minh Hội",
@@ -7988,7 +8012,8 @@
         "channel": "Đã bán",
         "date": "07/09/2026",
         "address": "Hầm xe almaz-Trung tâm hội nghị almaz , Vinhomes Riverside - Phường Phúc Lợi- Long Biên- Hà Nội",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK012": {
         "name": "Minh Hội",
@@ -7996,7 +8021,8 @@
         "channel": "Đã bán",
         "date": "07/09/2026",
         "address": "Hầm xe almaz-Trung tâm hội nghị almaz , Vinhomes Riverside - Phường Phúc Lợi- Long Biên- Hà Nội",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK001": {
         "name": "Lê Trọng Nghĩa",
@@ -8004,7 +8030,8 @@
         "channel": "Đã bán",
         "date": "07/09/2026",
         "address": "T6.21, Đường Lý Sơn, Khu Đô Thị Khai Sơn Town, Phường Bồ Đề, TP Hà Nội",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK038": {
         "name": "Lê Trọng Nghĩa",
@@ -8012,7 +8039,8 @@
         "channel": "Đã bán",
         "date": "07/09/2026",
         "address": "T6.21, Đường Lý Sơn, Khu Đô Thị Khai Sơn Town, Phường Bồ Đề, TP Hà Nội",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK-XB01": {
         "name": "Quốc",
@@ -8020,7 +8048,8 @@
         "channel": "Đã bán",
         "date": "07/09/2026",
         "address": "180 Lê Niệm, Phú Thạnh, Tân Phú",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK027": {
         "name": "Hào Phan",
@@ -8028,7 +8057,8 @@
         "channel": "Khách hẹn ghé xem",
         "date": "07/09/2026",
         "address": "tí khách ghé xem",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK026": {
         "name": "hồng hào",
@@ -8036,7 +8066,8 @@
         "channel": "Khách lấy tại shop",
         "date": "07/09/2026",
         "address": "khách lấy tại shop",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK029": {
         "name": "Do Hoang Anh",
@@ -8044,7 +8075,8 @@
         "channel": "Đã bán",
         "date": "07/09/2026",
         "address": "khu cbcnv khí điện đạm p1 ngô quyền tp cà mau",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "SLY011": {
         "name": "Nguyễn Thế Cường",
@@ -8131,8 +8163,9 @@
         "phone": "0353155595",
         "channel": "Book siêu tốc",
         "date": "10/09/2026",
-        "address": "book siêu tốc",
-        "status": "Đã giao & thanh toán"
+        "address": "khu vực 5 Phường Bình Thạnh Thị xã Long Mỹ Tỉnh Hậu giang (Đổi tay cầm ngày 13/09)",
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "PS003": {
         "name": "Tyo Tyo",
@@ -8140,7 +8173,8 @@
         "channel": "Khách lấy tại shop",
         "date": "11/09/2026",
         "address": "khách lấy tại shop",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "A110M-H09": {
         "name": "Hân",
@@ -8167,12 +8201,12 @@
         "status": "Đã giao & thanh toán"
     },
     "SLY012": {
-        "name": "Tuấn",
-        "phone": "0906864072",
+        "name": "Trịnh Quang Duy",
+        "phone": "0353238282",
         "channel": "Đã bán",
-        "date": "11/09/2026",
+        "date": "12/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "mai khách ghé lấy"
     },
     "DSK-PS5-01": {
         "name": "Nguyễn Duy Hoàng",
@@ -8180,7 +8214,8 @@
         "channel": "Đã bán",
         "date": "08/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK009": {
         "name": "Do Hoang Anh",
@@ -8188,7 +8223,8 @@
         "channel": "Đã bán",
         "date": "07/09/2026",
         "address": "khu cbcnv khí điện đạm p1 ngô quyền tp cà mau",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK034": {
         "name": "Hồng Hào",
@@ -8196,7 +8232,8 @@
         "channel": "Khách lấy tại shop",
         "date": "07/09/2026",
         "address": "khách lấy tại shop",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK039": {
         "name": "Hồng Hào",
@@ -8204,7 +8241,8 @@
         "channel": "Khách lấy tại shop",
         "date": "07/09/2026",
         "address": "khách lấy tại shop",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK040": {
         "name": "Hồng Hào",
@@ -8212,7 +8250,8 @@
         "channel": "Khách lấy tại shop",
         "date": "07/09/2026",
         "address": "khách lấy tại shop",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK041": {
         "name": "Hồng Hào",
@@ -8220,7 +8259,8 @@
         "channel": "Khách lấy tại shop",
         "date": "07/09/2026",
         "address": "khách lấy tại shop",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK022": {
         "name": "Hồng Hào",
@@ -8228,7 +8268,8 @@
         "channel": "Khách lấy tại shop",
         "date": "07/09/2026",
         "address": "khách lấy tại shop",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK014": {
         "name": "Hồng Hào",
@@ -8236,7 +8277,8 @@
         "channel": "Khách lấy tại shop",
         "date": "07/09/2026",
         "address": "khách lấy tại shop",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "CAM012": {
         "name": "Gái Russian",
@@ -8263,12 +8305,7 @@
         "status": "Đã giao & thanh toán"
     },
     "PS013": {
-        "name": "Anh Cường",
-        "phone": "",
-        "channel": "Đã bán",
-        "date": "06/09/2026",
-        "address": "",
-        "status": "Đã giao & thanh toán"
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "PS015": {
         "name": "Khách anh Nhân",
@@ -8276,7 +8313,8 @@
         "channel": "Đã bán",
         "date": "09/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "PK032": {
         "name": "Minh",
@@ -8292,15 +8330,17 @@
         "channel": "Khách lấy tại shop",
         "date": "06/09/2026",
         "address": "khách lấy tại shop",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "PS004": {
         "name": "Dũng Nguyễn",
         "phone": "",
-        "channel": "Khách lấy tại shop",
+        "channel": "khách lấy tại shop",
         "date": "12/09/2026",
         "address": "khách chuyển khoản no bill",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "CTRL004": {
         "name": "Dũng Nguyễn",
@@ -8308,7 +8348,8 @@
         "channel": "Khách lấy tại shop",
         "date": "12/09/2026",
         "address": "khách chuyển khoản no bill",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "PS006": {
         "name": "Huỳnh Bão Hoà",
@@ -8316,7 +8357,8 @@
         "channel": "Cọc khách",
         "date": "12/09/2026",
         "address": "",
-        "status": "Cọc 600k, ngày 20 lấy"
+        "status": "cọc 600k ngày 20 lấy, chờ chốt game tải",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "PK014": {
         "name": "Kim Thoa Nguyễn",
@@ -8329,7 +8371,7 @@
     "SLY001": {
         "name": "Nhi Hoàng",
         "phone": "0336415185",
-        "channel": "Book siêu tốc",
+        "channel": "book siêu tốc",
         "date": "12/09/2026",
         "address": "",
         "status": "Đang book siêu tốc"
@@ -8356,7 +8398,8 @@
         "channel": "Khách lấy tại shop",
         "date": "13/09/2026",
         "address": "",
-        "status": "Đã giao & thanh toán"
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
     },
     "DSK045": {
         "name": "Khách lẻ",
@@ -8364,9 +8407,307 @@
         "channel": "Khách lấy tại shop",
         "date": "13/09/2026",
         "address": "",
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "PS001": {
+        "name": "Đạt",
+        "phone": "",
+        "channel": "khách lấy tại shop",
+        "date": "13/09/2026",
+        "address": "",
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "PS005": {
+        "name": "Bùi Đức Thịnh",
+        "phone": "0389934722",
+        "channel": "Book siêu tốc",
+        "date": "13/09/2026",
+        "address": "Mai 17h book siêu tốc cho khách",
+        "status": "Mai 17h book siêu tốc cho khách",
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "PS009": {
+        "name": "longing Tran",
+        "phone": "",
+        "channel": "khách lấy tại shop",
+        "date": "14/09/2026",
+        "address": "",
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "PS010": {
+        "name": "longing Tran",
+        "phone": "",
+        "channel": "khách lấy tại shop",
+        "date": "14/09/2026",
+        "address": "",
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "PS011": {
+        "name": "lương duẩn",
+        "phone": "0879911666",
+        "channel": "Ship COD",
+        "date": "14/09/2026",
+        "address": "phòng khám thú y sampet, thôn lương cầu, xã đồng bằng, tỉnh hưng yên",
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "PS012": {
+        "name": "Quốc",
+        "phone": "0973134910",
+        "channel": "Ship",
+        "date": "13/09/2026",
+        "address": "Chùa cao đài vô 500m, khu 4 thị trấn cái bè huyện cái bè tỉnh tiền giang",
+        "status": "Đã giao & thanh toán",
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "PK011": {
+        "name": "Mạc Duy",
+        "phone": "0944535690",
+        "channel": "Ship COD",
+        "date": "13/09/2026",
+        "address": "Hoàng ngân, hiệp an, kinh môn, hải dương",
         "status": "Đã giao & thanh toán"
+    },
+    "LNS-CAN-025": {
+        "name": "Mạc Duy",
+        "phone": "0944535690",
+        "channel": "Ship COD",
+        "date": "13/09/2026",
+        "address": "Hoàng ngân, hiệp an, kinh môn, hải dương",
+        "status": "Đã giao & thanh toán"
+    },
+    "CAM034": {
+        "name": "Phan Đình Thành",
+        "phone": "0979309038",
+        "channel": "book siêu tốc",
+        "date": "14/09/2026",
+        "address": "book siêu tốc",
+        "status": "Đã giao & thanh toán"
+    },
+    "LNS-CAN-022": {
+        "name": "Phan Đình Thành",
+        "phone": "0979309038",
+        "channel": "book siêu tốc",
+        "date": "14/09/2026",
+        "address": "book siêu tốc",
+        "status": "Đã giao & thanh toán"
+    },
+    "SLY002": {
+        "name": "Vinh",
+        "phone": "0389932833",
+        "channel": "book siêu tốc",
+        "date": "13/09/2026",
+        "address": "book siêu tốc",
+        "status": "Đã giao & thanh toán"
+    },
+    "ANDROID-09": {
+        "name": "Đỗ Khải Du",
+        "phone": "",
+        "channel": "Khách lấy tại shop",
+        "date": "13/09/2026",
+        "address": "cọc 100k, lấy tại shop ngày 14/9",
+        "status": "Đã cọc"
+    },
+    "TAB002": {
+        "name": "Giao Việt An",
+        "phone": "",
+        "channel": "Ship",
+        "date": "15/09/2026",
+        "address": "",
+        "status": "Đã giao & thanh toán"
+    },
+    "LT015": {
+        "name": "Thư",
+        "phone": "0904050294",
+        "channel": "Ship tại nhà cho khách",
+        "date": "15/09/2026",
+        "address": "",
+        "status": "Đã giao & thanh toán"
+    },
+    "A50XW-H01": {
+        "name": "Hùng",
+        "phone": "0906100099",
+        "channel": "Ship COD",
+        "date": "15/09/2026",
+        "address": "147 Hoàng Quốc Việt - phường Nghĩa Đô - Hà Nội",
+        "status": "Đã giao & thanh toán"
+    },
+    "TAB003": {
+        "name": "Giao Việt An",
+        "date": "15/09/2026"
+    },
+    "ANK003": {
+        "name": "Khách lẻ",
+        "channel": "Đã bán",
+        "date": "15/09/2026"
+    },
+    "PS008": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "PS014": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "CTRL001": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "CTRL006": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "CTRL007": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "CTRL009": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK013": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK002": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK010": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK003": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK004": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK005": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK006": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK007": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK008": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK011": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK016": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK017": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK020": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK021": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK023": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK024": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK025": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK030": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK031": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK032": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK033": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK036": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK037": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK042": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK043": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-PS5-02": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-PS3-01": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-PS3-02": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-PS3-03": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-PS3-04": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-PS3-05": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-XB09": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-XB03": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-XB05": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-XB06": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-NT01": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-NT02": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-NT03": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-NT04": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-NT05": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-NT06": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-NT07": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-NT08": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-NT09": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "DSK-NT10": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "CTRL015": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "PS016": {
+        "postedOn": "MKP Tea, Chợ tốt"
+    },
+    "CTRL016": {
+        "postedOn": "MKP Tea, Chợ tốt"
     }
-};
+};;;;;
         // STANDARD CATEGORY PRIORITY ORDER
         const categoryPriorityOrder = [
             "Máy ảnh (Camera)",
@@ -8661,20 +9002,28 @@
             return new Intl.NumberFormat('vi-VN').format(num) + " đ";
         }
 
-        function getCategoryIcon(cat) {
-            if (!cat) return "📦";
-            const c = cat.toLowerCase();
-            if (c.includes("camera") || c.includes("máy ảnh")) return "📷";
-            if (c.includes("lens") || c.includes("ống kính")) return "🔭";
-            if (c.includes("iphone") || c.includes("apple")) return "🍎";
-            if (c.includes("android") || c.includes("điện thoại")) return "📱";
-            if (c.includes("laptop")) return "💻";
-            if (c.includes("pc") || c.includes("màn hình")) return "🖥️";
-            if (c.includes("playstation") || c.includes("game")) return "🎮";
-            if (c.includes("compact") || c.includes("quay")) return "📹";
-            if (c.includes("studio") || c.includes("đèn")) return "💡";
-            if (c.includes("âm thanh") || c.includes("phụ kiện")) return "🎧";
-            return "📦";
+        function getCategoryIcon(cat, name = "") {
+            let icon = null;
+            if (cat) {
+                const c = cat.toLowerCase();
+                if (c.includes("camera") || c.includes("máy ảnh")) icon = "📷";
+                else if (c.includes("lens") || c.includes("ống kính")) icon = "🔭";
+                else if (c.includes("iphone") || c.includes("apple")) icon = "🍎";
+                else if (c.includes("android") || c.includes("điện thoại")) icon = "📱";
+                else if (c.includes("laptop")) icon = "💻";
+                else if (c.includes("pc") || c.includes("màn hình")) icon = "🖥️";
+                else if (c.includes("playstation") || c.includes("game")) icon = "🎮";
+                else if (c.includes("compact") || c.includes("quay")) icon = "📹";
+                else if (c.includes("studio") || c.includes("đèn")) icon = "💡";
+                else if (c.includes("âm thanh") || c.includes("phụ kiện")) icon = "🎧";
+            }
+            if (!icon && name) {
+                const n = name.toLowerCase();
+                if (n.includes("sạc") || n.includes("pin") || n.includes("anker")) icon = "🔋";
+                else if (n.includes("chuột")) icon = "🖱️";
+                else if (n.includes("bàn phím")) icon = "⌨️";
+            }
+            return icon || "📦";
         }
 
         // SMART PRODUCT NAME & CONDITION PARSER
@@ -8968,7 +9317,7 @@
                 // Table Group Header Row
                 tableHtml += `
                     <tr class="cat-header-row">
-                        <td colspan="5" style="background: ${palette.bg} !important; border-left: 4px solid ${palette.border} !important;">
+                        <td colspan="6" style="background: ${palette.bg} !important; border-left: 4px solid ${palette.border} !important;">
                             <div class="cat-header-content">
                                 <div class="cat-header-title" style="color: ${palette.text};">
                                     <span style="font-size: 16px;">${catIcon}</span>
@@ -9022,7 +9371,7 @@
                     // Table Sub-header Row
                     tableHtml += `
                         <tr class="sub-header-row">
-                            <td colspan="5">
+                            <td colspan="6">
                                 <div class="sub-header-content">
                                     <div class="sub-header-title" style="color: ${subGroup.color};">
                                         <span>${subGroup.icon}</span>
@@ -9044,6 +9393,7 @@
 
                     // Render each product item: USE ITEM'S DisplayNumber
                     subItems.forEach((item) => {
+                        const itemIcon = getCategoryIcon(item.Category, item.Name);
                         const seqNumber = (typeof item.DisplayNumber === 'number') ? item.DisplayNumber : (item.SKU);
                         const parsed = splitProductNameAndDetails(item.Name, item.Location);
                         const isSold = isSoldItem(item);
@@ -9086,7 +9436,7 @@
                                 </td>
                                 <td>
                                     <div class="product-cell">
-                                        <div class="product-thumb">${catIcon}</div>
+                                        <div class="product-thumb">${itemIcon}</div>
                                         <div>
                                             <div class="product-name" title="${item.Name}">${parsed.cleanName}</div>
                                             <div class="product-cat">${item.Category || 'Chung'} • <span style="font-family: monospace; color: #64748b;">${item.SKU}</span></div>
@@ -9095,6 +9445,9 @@
                                 </td>
                                 <td>
                                     <div class="tags-container">${tagsHtml}</div>
+                                </td>
+                                <td style="text-align: center;">
+                                    ${cust && cust.postedOn ? `<div class="tags-container" style="justify-content: center;">${cust.postedOn.split(',').map(p => '<span class="tag tag-post">' + p.trim() + '</span>').join('')}</div>` : ''}
                                 </td>
                                 <td class="price-cell">
                                     <div class="price-val">${item.UnitPrice > 0 ? formatVND(item.UnitPrice) : '0 đ'}</div>
@@ -9120,7 +9473,7 @@
                                 <div>
                                     <div class="grid-top">
                                         <span class="sku-badge" style="font-size: 11px; padding: 2px 6px;">#${seqNumber}</span>
-                                        <div class="grid-thumb">${catIcon}</div>
+                                        <div class="grid-thumb">${itemIcon}</div>
                                     </div>
                                     <div class="grid-title" title="${item.Name}">${parsed.cleanName}</div>
                                     <div class="grid-tags">${tagsHtml}</div>
@@ -9327,5 +9680,6 @@
             filterData();
         });
     </script>
+</div>
 </body>
 </html>
